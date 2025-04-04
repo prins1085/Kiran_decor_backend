@@ -11,13 +11,16 @@ public class QuoteproApplication extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
 		 // Load the .env file
-        Dotenv dotenv = Dotenv.configure().load();
+        Dotenv dotenv = null;
+        try {
+            dotenv = Dotenv.configure()
+                           .ignoreIfMissing() // Ignore the error if .env is missing
+                           .load();
+        } catch (Exception e) {
+            System.out.println("No .env file found. Using system environment variables.");
+        }
         
-        // Set system properties from the .env file
-        System.setProperty("SPRING_DATASOURCE_URL", dotenv.get("SPRING_DATASOURCE_URL"));
-        System.setProperty("SPRING_DATASOURCE_USERNAME", dotenv.get("SPRING_DATASOURCE_USERNAME"));
-        System.setProperty("SPRING_DATASOURCE_PASSWORD", dotenv.get("SPRING_DATASOURCE_PASSWORD"));
-
+       
 		SpringApplication.run(QuoteproApplication.class, args);
 	}
 	
