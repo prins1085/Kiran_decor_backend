@@ -1,14 +1,12 @@
-# Use an official OpenJDK runtime as a parent image
-FROM openjdk:17-jdk-slim
-
-# Set the working directory inside the container
+# Stage 1: Build the app
+FROM gradle:8.5-jdk17 AS build
 WORKDIR /app
+COPY . .
+RUN gradle clean build -x test --no-daemon
 
-# Copy the JAR file from the build output to the container
-COPY build/libs/QUOTEPRO-0.0.1-SNAPSHOT.jar app.jar
-
-# Expose the application port
+# Stage 2: Run the app
+FROM openjdk:17-jdk-slim
+WORKDIR /app
+COPY --from=build /app/build/libs/*.jar app.jar
 EXPOSE 9191
-
-# Run the application
 ENTRYPOINT ["java", "-jar", "app.jar"]
