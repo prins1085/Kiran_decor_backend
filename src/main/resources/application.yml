@@ -1,0 +1,81 @@
+server:
+  port:  9191
+  servlet:
+    context-path: /QUOTEPRO
+  
+spring:
+  application:
+    name: QUOTEPRO
+  mvc:
+    view:
+      prefix: /WEB-INF/view/
+      suffix: .jsp
+  
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: ${SPRING_DATASOURCE_URL} # Replace with environment variable
+    username: ${SPRING_DATASOURCE_USERNAME} # Replace with environment variable
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    
+    hikari:
+      maximum-pool-size: 1000
+      minimum-idle: 10
+      idle-timeout: 10000
+      max-lifetime: 60000
+      connection-timeout: 5000000
+      connection-init-sql: SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+      auto-commit: true
+      
+    tomcat:
+     default-auto-commit: true
+     max-active: 1000
+     min-idle: 5
+     max-wait: 36000
+     maxAge: 100000
+     test-on-connect: true
+     test-on-borrow: true
+     test-on-return: false
+     removeAbandoned: true
+     removeAbandonedTimeout: 90
+     minEvictableIdleTimeMillis: 90000
+     initial-size: 10
+     jmxEnabled: true
+     log-abandoned: true
+     test-while-idle: true
+     time-between-eviction-runs-millis: 180000
+     validation-interval: 30000
+     abandon-when-percentage-full: 50
+     jdbc-interceptors: ResetAbandonedTimer
+         
+  jpa:
+    hibernate.ddl-auto: update
+    generate-ddl: true
+    show-sql: true
+  
+  task:
+    scheduling:
+      pool:
+        size: 5
+
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: logfile, customlogfile  # Include the default logfile endpoint and custom endpoint
+#  endpoint:
+#    logfile:
+#      external-file: EMS_LOG.log  # Path to the EMS log file     
+management:
+  endpoints:
+    web:
+      base-path: /logs
+      exposure:
+        include: info, health, logfile,mqtt
+        
+logging:
+  file:
+    name: EMS_LOG.log  # General application log file
+  level:
+    root: INFO  # Default log level for root logger
+    com.example.myapp.CustomLogger: INFO  # Log level for CustomLogger
+
