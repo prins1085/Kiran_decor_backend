@@ -5,7 +5,7 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # Copy the JAR file from the build output to the container
-COPY build/libs/quotepro-0.0.1-SNAPSHOT.jar app.jar
+COPY build/libs/QUOTEPRO-0.0.1-SNAPSHOT.jar app.jar
 
 # Expose the application port
 EXPOSE 9191
