@@ -82,7 +82,7 @@ public class QuationServiceImpl implements QuationSerive {
 				transaction = manager.getTransaction();
 				if (transaction != null) {
 					Integer curtainid = Integer.parseInt(dbUtils.getMaxId("curtain", "curtainid", null, manager));
-					Integer blindid = Integer.parseInt(dbUtils.getMaxId("BLIND", "blindid", null, manager));
+					Integer blindid = Integer.parseInt(dbUtils.getMaxId("blind", "blindid", null, manager));
 					Integer mattressid = Integer.parseInt(dbUtils.getMaxId("mattress", "mattressid", null, manager));
 					Integer sofaid = Integer.parseInt(dbUtils.getMaxId("sofa", "sofaid", null, manager));
 
@@ -90,7 +90,7 @@ public class QuationServiceImpl implements QuationSerive {
 					if (Common.checkNullAndEmpty(customerid)) {/* Edit */
 						desc = CommonEnum.UPDATE_SUCCESS.getValue();
 
-						String updateQuery = "UPDATE CUSTOMERS SET CUSTOMER_NAME=:CUSTOMER_NAME,MOBILE_NUMBER=:MOBILE_NUMBER,ARCHITECT_NAME=:ARCHITECT_NAME  WHERE CUSTOMER_ID = "
+						String updateQuery = "UPDATE customers SET CUSTOMER_NAME=:CUSTOMER_NAME,MOBILE_NUMBER=:MOBILE_NUMBER,ARCHITECT_NAME=:ARCHITECT_NAME  WHERE CUSTOMER_ID = "
 								+ customerid;
 						manager.createNativeQuery(updateQuery).setParameter("CUSTOMER_NAME", dto.getCustomer_name())
 
@@ -103,7 +103,7 @@ public class QuationServiceImpl implements QuationSerive {
 								.executeUpdate();
 
 						String deleteCurtainQuery = "DELETE FROM curtain WHERE CUSTOMER_ID = " + customerid;
-						String deleteBlindQuery = "DELETE FROM BLIND WHERE CUSTOMER_ID =" + customerid;
+						String deleteBlindQuery = "DELETE FROM blind WHERE CUSTOMER_ID =" + customerid;
 						String deleteMattressQuery = "DELETE FROM mattress WHERE CUSTOMER_ID =" + customerid;
 						String deleteSofaQuery = "DELETE FROM sofa WHERE CUSTOMER_ID =" + customerid;
 
@@ -115,7 +115,7 @@ public class QuationServiceImpl implements QuationSerive {
 					} else { /* Insert */
 						customerid = dbUtils.getMaxId("customers", "customer_id", null, manager);
 
-						String insertquery = "INSERT INTO CUSTOMERS(customer_id,customer_name,mobile_number,architect_name) "
+						String insertquery = "INSERT INTO customers(customer_id,customer_name,mobile_number,architect_name) "
 								+ "VALUES(:customer_id,:customer_name,:mobile_number,:architect_name)";
 						manager.createNativeQuery(insertquery).setParameter("customer_id", Integer.parseInt(customerid))
 								.setParameter("customer_name", dto.getCustomer_name())
