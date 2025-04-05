@@ -88,7 +88,7 @@ public class CompanyServiceImpl implements CompanyService {
 					if (Common.checkNullAndEmpty(mattcompanyid)) {/* Edit */
 						desc = CommonEnum.UPDATE_SUCCESS.getValue();
 
-						String updateQuery = "UPDATE MATTRESSCOMPANY SET COMPANY=:COMPANY,PRODUCTNAME=:PRODUCTNAME,SIZE=:SIZE,PRICE=:PRICE  WHERE MATTCOMPANYID = "
+						String updateQuery = "UPDATE mattresscompany SET COMPANY=:COMPANY,PRODUCTNAME=:PRODUCTNAME,SIZE=:SIZE,PRICE=:PRICE  WHERE MATTCOMPANYID = "
 								+ mattcompanyid;
 						manager.createNativeQuery(updateQuery).setParameter("COMPANY", dto.getCompany())
 								.setParameter("PRODUCTNAME",
@@ -98,8 +98,8 @@ public class CompanyServiceImpl implements CompanyService {
 								.executeUpdate();
 
 					} else { /* Insert */
-						mattcompanyid = dbUtils.getMaxId("MATTRESSCOMPANY", "MATTCOMPANYID", null, manager);
-						String insertquery = "INSERT INTO MATTRESSCOMPANY(MATTCOMPANYID, COMPANY, PRODUCTNAME, `SIZE`, PRICE) "
+						mattcompanyid = dbUtils.getMaxId("mattresscompany", "MATTCOMPANYID", null, manager);
+						String insertquery = "INSERT INTO mattresscompany(MATTCOMPANYID, COMPANY, PRODUCTNAME, `SIZE`, PRICE) "
 								+ "VALUES(:MATTCOMPANYID,:COMPANY,:PRODUCTNAME,:SIZE,:PRICE)";
 						manager.createNativeQuery(insertquery)
 								.setParameter("MATTCOMPANYID", Integer.parseInt(mattcompanyid))
@@ -148,7 +148,7 @@ public class CompanyServiceImpl implements CompanyService {
 			manager = emf.createEntityManager();
 			if (Common.checkNullAndEmpty(mattcompanyid)) {
 				Session session = emf.createEntityManager().unwrap(Session.class);
-				String query = "SELECT * FROM MATTRESSCOMPANY WHERE  MATTCOMPANYID = " + mattcompanyid;
+				String query = "SELECT * FROM mattresscompany WHERE  MATTCOMPANYID = " + mattcompanyid;
 				List<?> list = ListToJSONConverter.queryRunner(session, query);
 
 				if (list.size() > 0) {
@@ -191,7 +191,7 @@ public class CompanyServiceImpl implements CompanyService {
 			if (transaction != null) {
 
 				transaction.begin();
-				String deleteQuery = "DELETE FROM MATTRESSCOMPANY WHERE MATTCOMPANYID = " + mattcompanyid;
+				String deleteQuery = "DELETE FROM mattresscompany WHERE MATTCOMPANYID = " + mattcompanyid;
 				manager.createNativeQuery(deleteQuery).executeUpdate();
 				transaction.commit();
 

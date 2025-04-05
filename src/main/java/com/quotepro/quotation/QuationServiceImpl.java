@@ -81,9 +81,9 @@ public class QuationServiceImpl implements QuationSerive {
 			if (manager.isOpen() && manager != null) {
 				transaction = manager.getTransaction();
 				if (transaction != null) {
-					Integer curtainid = Integer.parseInt(dbUtils.getMaxId("CURTAIN", "curtainid", null, manager));
+					Integer curtainid = Integer.parseInt(dbUtils.getMaxId("curtain", "curtainid", null, manager));
 					Integer blindid = Integer.parseInt(dbUtils.getMaxId("BLIND", "blindid", null, manager));
-					Integer mattressid = Integer.parseInt(dbUtils.getMaxId("MATTRESS", "mattressid", null, manager));
+					Integer mattressid = Integer.parseInt(dbUtils.getMaxId("mattress", "mattressid", null, manager));
 					Integer sofaid = Integer.parseInt(dbUtils.getMaxId("sofa", "sofaid", null, manager));
 
 					transaction.begin();
@@ -102,10 +102,10 @@ public class QuationServiceImpl implements QuationSerive {
 												: null)
 								.executeUpdate();
 
-						String deleteCurtainQuery = "DELETE FROM CURTAIN WHERE CUSTOMER_ID = " + customerid;
+						String deleteCurtainQuery = "DELETE FROM curtain WHERE CUSTOMER_ID = " + customerid;
 						String deleteBlindQuery = "DELETE FROM BLIND WHERE CUSTOMER_ID =" + customerid;
-						String deleteMattressQuery = "DELETE FROM MATTRESS WHERE CUSTOMER_ID =" + customerid;
-						String deleteSofaQuery = "DELETE FROM SOFA WHERE CUSTOMER_ID =" + customerid;
+						String deleteMattressQuery = "DELETE FROM mattress WHERE CUSTOMER_ID =" + customerid;
+						String deleteSofaQuery = "DELETE FROM sofa WHERE CUSTOMER_ID =" + customerid;
 
 						manager.createNativeQuery(deleteCurtainQuery).executeUpdate();
 						manager.createNativeQuery(deleteBlindQuery).executeUpdate();
@@ -512,7 +512,7 @@ public class QuationServiceImpl implements QuationSerive {
 				String query = "select * from customers c  where c.customer_id =" + customer_id;
 				List<?> list = ListToJSONConverter.queryRunner(session, query);
 
-				String queryCurtain = "SELECT * FROM CURTAIN C  WHERE CUSTOMER_ID = " + customer_id;
+				String queryCurtain = "SELECT * FROM curtain C  WHERE CUSTOMER_ID = " + customer_id;
 				String queryBlind = "SELECT "
 						+ "    blindid AS blindid, itemname AS name, total AS total, blind_type AS blindType, width AS width, height AS height, per_sq_feet AS perSqFeet, per_meter AS perMeter,"
 						+ "    channel_per_sq_feet AS channelPerSqFeet, fitting_cost AS fittingCost, dimout_per_meter AS dimoutPerMeter, discount_percentage AS discountPercentage, discount AS discount,"
@@ -521,8 +521,8 @@ public class QuationServiceImpl implements QuationSerive {
 						+ "    dimout_cost AS dimoutCost, total_cost AS totalCost, discounted_total AS discountedTotal"
 						+ " FROM "
 						+ "    blind b  WHERE CUSTOMER_ID = " + customer_id;
-				String queryMattress = " SELECT * FROM MATTRESS M WHERE CUSTOMER_ID = " + customer_id;
-				String querySofa = " SELECT * FROM SOFA S WHERE CUSTOMER_ID = " + customer_id;
+				String queryMattress = " SELECT * FROM mattress M WHERE CUSTOMER_ID = " + customer_id;
+				String querySofa = " SELECT * FROM sofa S WHERE CUSTOMER_ID = " + customer_id;
 
 				List<?> Curtain_list = ListToJSONConverter.queryRunner(session1, queryCurtain);
 				List<?> Blind_list = ListToJSONConverter.queryRunner(session2, queryBlind);
