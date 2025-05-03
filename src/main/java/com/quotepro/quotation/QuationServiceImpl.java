@@ -244,7 +244,7 @@ public class QuationServiceImpl implements QuationSerive {
 									+ channelType + "', " + motorPrice + ", " + remotePrice + ", " + fittingCost + ", "
 									+ materialDiscountPercentage + ", " + weightDoriPerMeter + ", " + discount + " , "
 									+ beforeDiscountPrice + "," + afterDiscountPrice + " , " + sheerWidth + "," + labor2
-									+ "," + channelPerFeet2 + "," + channelType2 + "," + motorPrice2 + ","
+									+ "," + channelPerFeet2 + ",'" + channelType2 + "'," + motorPrice2 + ","
 									+ remotePrice2 + "," + fittingCost2 + ")");
 
 							curtainid++;
