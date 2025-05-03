@@ -138,6 +138,24 @@ public class QuationDTO {
 		public String discountAmount;
 		public String discount;
 		public String discountedMaterialCost;
+		public String beforeDiscountPrice;
+		public String afterDiscountPrice;
+
+		public String getBeforeDiscountPrice() {
+			return beforeDiscountPrice;
+		}
+
+		public void setBeforeDiscountPrice(String beforeDiscountPrice) {
+			this.beforeDiscountPrice = beforeDiscountPrice;
+		}
+
+		public String getAfterDiscountPrice() {
+			return afterDiscountPrice;
+		}
+
+		public void setAfterDiscountPrice(String afterDiscountPrice) {
+			this.afterDiscountPrice = afterDiscountPrice;
+		}
 
 		public String getMattressid() {
 			return mattressid;
@@ -285,147 +303,208 @@ public class QuationDTO {
 		public String dimoutCost;
 		public String totalCost;
 		public String discountedTotal;
+		public String beforeDiscountPrice;
+		public String afterDiscountPrice;
+
+		public String getBeforeDiscountPrice() {
+			return beforeDiscountPrice;
+		}
+
+		public void setBeforeDiscountPrice(String beforeDiscountPrice) {
+			this.beforeDiscountPrice = beforeDiscountPrice;
+		}
+
+		public String getAfterDiscountPrice() {
+			return afterDiscountPrice;
+		}
+
+		public void setAfterDiscountPrice(String afterDiscountPrice) {
+			this.afterDiscountPrice = afterDiscountPrice;
+		}
 
 		public String getBlindid() {
 			return blindid;
 		}
+
 		public void setBlindid(String blindid) {
 			this.blindid = blindid;
 		}
+
 		public String getName() {
 			return name;
 		}
+
 		public void setName(String name) {
 			this.name = name;
 		}
+
 		public String getTotal() {
 			return total;
 		}
+
 		public void setTotal(String total) {
 			this.total = total;
 		}
+
 		public String getBlindType() {
 			return blindType;
 		}
+
 		public void setBlindType(String blindType) {
 			this.blindType = blindType;
 		}
+
 		public String getWidth() {
 			return width;
 		}
+
 		public void setWidth(String width) {
 			this.width = width;
 		}
+
 		public String getHeight() {
 			return height;
 		}
+
 		public void setHeight(String height) {
 			this.height = height;
 		}
+
 		public String getPerSqFeet() {
 			return perSqFeet;
 		}
+
 		public void setPerSqFeet(String perSqFeet) {
 			this.perSqFeet = perSqFeet;
 		}
+
 		public String getPerMeter() {
 			return perMeter;
 		}
+
 		public void setPerMeter(String perMeter) {
 			this.perMeter = perMeter;
 		}
+
 		public String getChannelPerSqFeet() {
 			return channelPerSqFeet;
 		}
+
 		public void setChannelPerSqFeet(String channelPerSqFeet) {
 			this.channelPerSqFeet = channelPerSqFeet;
 		}
+
 		public String getFittingCost() {
 			return fittingCost;
 		}
+
 		public void setFittingCost(String fittingCost) {
 			this.fittingCost = fittingCost;
 		}
+
 		public String getDimoutPerMeter() {
 			return dimoutPerMeter;
 		}
+
 		public void setDimoutPerMeter(String dimoutPerMeter) {
 			this.dimoutPerMeter = dimoutPerMeter;
 		}
+
 		public String getDiscountPercentage() {
 			return discountPercentage;
 		}
+
 		public void setDiscountPercentage(String discountPercentage) {
 			this.discountPercentage = discountPercentage;
 		}
+
 		public String getDiscount() {
 			return discount;
 		}
+
 		public void setDiscount(String discount) {
 			this.discount = discount;
 		}
+
 		public String getTotalSqFeet() {
 			return totalSqFeet;
 		}
+
 		public void setTotalSqFeet(String totalSqFeet) {
 			this.totalSqFeet = totalSqFeet;
 		}
+
 		public String getNumberOfParts() {
 			return numberOfParts;
 		}
+
 		public void setNumberOfParts(String numberOfParts) {
 			this.numberOfParts = numberOfParts;
 		}
+
 		public String getTotalMeters() {
 			return totalMeters;
 		}
+
 		public void setTotalMeters(String totalMeters) {
 			this.totalMeters = totalMeters;
 		}
+
 		public String getChannelSqFeet() {
 			return channelSqFeet;
 		}
+
 		public void setChannelSqFeet(String channelSqFeet) {
 			this.channelSqFeet = channelSqFeet;
 		}
+
 		public String getChannelCost() {
 			return channelCost;
 		}
+
 		public void setChannelCost(String channelCost) {
 			this.channelCost = channelCost;
 		}
+
 		public String getFabricCost() {
 			return fabricCost;
 		}
+
 		public void setFabricCost(String fabricCost) {
 			this.fabricCost = fabricCost;
 		}
+
 		public String getDimoutMeters() {
 			return dimoutMeters;
 		}
+
 		public void setDimoutMeters(String dimoutMeters) {
 			this.dimoutMeters = dimoutMeters;
 		}
+
 		public String getDimoutCost() {
 			return dimoutCost;
 		}
+
 		public void setDimoutCost(String dimoutCost) {
 			this.dimoutCost = dimoutCost;
 		}
+
 		public String getTotalCost() {
 			return totalCost;
 		}
+
 		public void setTotalCost(String totalCost) {
 			this.totalCost = totalCost;
 		}
+
 		public String getDiscountedTotal() {
 			return discountedTotal;
 		}
+
 		public void setDiscountedTotal(String discountedTotal) {
 			this.discountedTotal = discountedTotal;
 		}
-
-		
 
 	}
 
@@ -451,6 +530,95 @@ public class QuationDTO {
 		public String materialDiscountPercentage;
 		public String weightDoriPerMeter;
 		public String discount;
+		public String beforeDiscountPrice;
+		public String afterDiscountPrice;
+		public String sheerWidth;
+		public String labor2;
+		public String channelPerFeet2;
+		public String channelType2;
+		public String motorPrice2;
+		public String remotePrice2;
+		public String fittingCost2;
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		public String getSheerWidth() {
+			return sheerWidth;
+		}
+
+		public void setSheerWidth(String sheerWidth) {
+			this.sheerWidth = sheerWidth;
+		}
+
+		public String getLabor2() {
+			return labor2;
+		}
+
+		public void setLabor2(String labor2) {
+			this.labor2 = labor2;
+		}
+
+		public String getChannelPerFeet2() {
+			return channelPerFeet2;
+		}
+
+		public void setChannelPerFeet2(String channelPerFeet2) {
+			this.channelPerFeet2 = channelPerFeet2;
+		}
+
+		public String getChannelType2() {
+			return channelType2;
+		}
+
+		public void setChannelType2(String channelType2) {
+			this.channelType2 = channelType2;
+		}
+
+		public String getMotorPrice2() {
+			return motorPrice2;
+		}
+
+		public void setMotorPrice2(String motorPrice2) {
+			this.motorPrice2 = motorPrice2;
+		}
+
+		public String getRemotePrice2() {
+			return remotePrice2;
+		}
+
+		public void setRemotePrice2(String remotePrice2) {
+			this.remotePrice2 = remotePrice2;
+		}
+
+		public String getFittingCost2() {
+			return fittingCost2;
+		}
+
+		public void setFittingCost2(String fittingCost2) {
+			this.fittingCost2 = fittingCost2;
+		}
+
+		public String getBeforeDiscountPrice() {
+			return beforeDiscountPrice;
+		}
+
+		public void setBeforeDiscountPrice(String beforeDiscountPrice) {
+			this.beforeDiscountPrice = beforeDiscountPrice;
+		}
+
+		public String getAfterDiscountPrice() {
+			return afterDiscountPrice;
+		}
+
+		public void setAfterDiscountPrice(String afterDiscountPrice) {
+			this.afterDiscountPrice = afterDiscountPrice;
+		}
 
 		public String getCurtainid() {
 			return curtainid;

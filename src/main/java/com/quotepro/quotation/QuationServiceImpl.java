@@ -51,7 +51,13 @@ public class QuationServiceImpl implements QuationSerive {
 		EntityManager manager = null;
 		try {
 			manager = emf.createEntityManager();
-			String query = "select * from customers c ";
+			String query = " select c.customer_id, c.customer_name, c.mobile_number, c.architect_name, coalesce(curt.total_curtain, 0) as total_curtain, "
+					+ " coalesce(b.total_blind, 0) as total_blind, coalesce(matt.total_mattress, 0) as total_mattress, coalesce(s.total_sofa, 0) as total_sofa, "
+					+ " coalesce(curt.total_curtain, 0) + coalesce(b.total_blind, 0) + coalesce(matt.total_mattress, 0) + coalesce(s.total_sofa, 0) as grand_total "
+					+ " from customers c left join ( select customer_id, SUM(total) as total_curtain from curtain group by customer_id) curt on c.customer_id = curt.customer_id "
+					+ " left join ( select customer_id, SUM(total) as total_blind from blind group by customer_id) b on c.customer_id = b.customer_id "
+					+ " left join ( select customer_id, SUM(total) as total_mattress from mattress group by customer_id) matt on c.customer_id = matt.customer_id "
+					+ " left join ( select customer_id, SUM(total) as total_sofa from sofa group by customer_id) s on c.customer_id = s.customer_id ";
 			List<?> gridlist = dbUtils.getListKeyValuePairAndList(query, manager, true);
 			return ResponseEntity.ok(gridlist);
 		} catch (Exception e) {
@@ -129,14 +135,15 @@ public class QuationServiceImpl implements QuationSerive {
 						String itemname, total, width, height, perMeter, labor, channelPerFeet, dimoutPerMeter,
 								sheerPerMeter, sheerHeight, sheerDiscountPercentage, panelMeters, panelPerMeter,
 								channelType, motorPrice, remotePrice, fittingCost, materialDiscountPercentage,
-								weightDoriPerMeter, discount;
+								weightDoriPerMeter, discount, beforeDiscountPrice, afterDiscountPrice, sheerWidth,
+								labor2, channelPerFeet2, channelType2, motorPrice2, remotePrice2, fittingCost2;
 
 						StringBuilder insertString = new StringBuilder();
 						StringBuilder values = new StringBuilder();
 						insertString.append(
-								"INSERT INTO curtain (curtainid, customer_id,  itemname, total, width, height, perMeter , labor, channelPerFeet, dimoutPerMeter, sheerPerMeter, sheerHeight, sheerDiscountPercentage, panelMeters, panelPerMeter, channelType, motorPrice, remotePrice, fittingCost, materialDiscountPercentage, weightDoriPerMeter, discount ) VALUES ");
+								"INSERT INTO curtain (curtainid, customer_id,  itemname, total, width, height, perMeter , labor, channelPerFeet, dimoutPerMeter, sheerPerMeter, sheerHeight, sheerDiscountPercentage, panelMeters, panelPerMeter, channelType, motorPrice, remotePrice, fittingCost, materialDiscountPercentage, weightDoriPerMeter, discount,beforeDiscountPrice,afterDiscountPrice,sheerWidth,labor2,channelPerFeet2,channelType2,motorPrice2,remotePrice2,fittingCost2 ) VALUES ");
 						for (int j = 0; j < curtList.size(); j++) {
-							itemname = total = width = height = perMeter = labor = channelPerFeet = dimoutPerMeter = sheerPerMeter = sheerHeight = sheerDiscountPercentage = panelMeters = panelPerMeter = channelType = motorPrice = remotePrice = fittingCost = materialDiscountPercentage = weightDoriPerMeter = discount = null;
+							itemname = total = width = height = perMeter = labor = channelPerFeet = dimoutPerMeter = sheerPerMeter = sheerHeight = sheerDiscountPercentage = panelMeters = panelPerMeter = channelType = motorPrice = remotePrice = fittingCost = materialDiscountPercentage = weightDoriPerMeter = discount = beforeDiscountPrice = afterDiscountPrice = sheerWidth = labor2 = channelPerFeet2 = channelType2 = motorPrice2 = remotePrice2 = fittingCost2 = null;
 							values.append(values.length() == 0 ? "" : ",");
 							itemname = Common.checkNullAndEmpty(curtList.get(j).getItemname())
 									? curtList.get(j).getItemname()
@@ -197,13 +204,48 @@ public class QuationServiceImpl implements QuationSerive {
 							discount = Common.checkNullAndEmpty(curtList.get(j).getDiscount())
 									? curtList.get(j).getDiscount()
 									: null;
+							afterDiscountPrice = Common.checkNullAndEmpty(curtList.get(j).getAfterDiscountPrice())
+									? curtList.get(j).getAfterDiscountPrice()
+									: null;
+							beforeDiscountPrice = Common.checkNullAndEmpty(curtList.get(j).getBeforeDiscountPrice())
+									? curtList.get(j).getBeforeDiscountPrice()
+									: null;
+
+							sheerWidth = Common.checkNullAndEmpty(curtList.get(j).getSheerWidth())
+									? curtList.get(j).getSheerWidth()
+									: null;
+							labor2 = Common.checkNullAndEmpty(curtList.get(j).getLabor2()) ? curtList.get(j).getLabor2()
+									: null;
+
+							channelPerFeet2 = Common.checkNullAndEmpty(curtList.get(j).getChannelPerFeet2())
+									? curtList.get(j).getChannelPerFeet2()
+									: null;
+
+							channelType2 = Common.checkNullAndEmpty(curtList.get(j).getChannelType2())
+									? curtList.get(j).getChannelType2()
+									: null;
+
+							motorPrice2 = Common.checkNullAndEmpty(curtList.get(j).getMotorPrice2())
+									? curtList.get(j).getMotorPrice2()
+									: null;
+
+							remotePrice2 = Common.checkNullAndEmpty(curtList.get(j).getRemotePrice2())
+									? curtList.get(j).getRemotePrice2()
+									: null;
+
+							fittingCost2 = Common.checkNullAndEmpty(curtList.get(j).getFittingCost2())
+									? curtList.get(j).getFittingCost2()
+									: null;
 
 							values.append("(" + curtainid + ", " + customerid + ", '" + itemname + "', " + total + ", "
 									+ width + ", " + height + ", " + perMeter + ", " + labor + " , " + channelPerFeet
 									+ ", " + dimoutPerMeter + ", " + sheerPerMeter + ", " + sheerHeight + ", "
 									+ sheerDiscountPercentage + ", " + panelMeters + ", " + panelPerMeter + ", '"
 									+ channelType + "', " + motorPrice + ", " + remotePrice + ", " + fittingCost + ", "
-									+ materialDiscountPercentage + ", " + weightDoriPerMeter + ", " + discount + ")");
+									+ materialDiscountPercentage + ", " + weightDoriPerMeter + ", " + discount + " , "
+									+ beforeDiscountPrice + "," + afterDiscountPrice + " , " + sheerWidth + "," + labor2
+									+ "," + channelPerFeet2 + "," + channelType2 + "," + motorPrice2 + ","
+									+ remotePrice2 + "," + fittingCost2 + ")");
 
 							curtainid++;
 
@@ -224,18 +266,18 @@ public class QuationServiceImpl implements QuationSerive {
 						String itemname, total, blind_type, width, height, per_sq_feet, per_meter, channel_per_sq_feet,
 								fitting_cost, dimout_per_meter, discount_percentage, discount, total_sq_feet,
 								number_of_parts, total_meters, channel_sq_feet, channel_cost, fabric_cost,
-								dimout_meters, dimout_cost, total_cost, discounted_total;
+								dimout_meters, dimout_cost, total_cost, discounted_total, beforeDiscountPrice,
+								afterDiscountPrice;
 
 						StringBuilder insertString = new StringBuilder();
 						StringBuilder values = new StringBuilder();
 						insertString.append(
-								"INSERT INTO blind (blindid, itemname, total, blind_type, width, height, per_sq_feet, per_meter, channel_per_sq_feet, fitting_cost, dimout_per_meter, discount_percentage, discount, total_sq_feet, number_of_parts, total_meters, channel_sq_feet, channel_cost, fabric_cost, dimout_meters, dimout_cost, total_cost, discounted_total, customer_id ) VALUES ");
+								"INSERT INTO blind (blindid, itemname, total, blind_type, width, height, per_sq_feet, per_meter, channel_per_sq_feet, fitting_cost, dimout_per_meter, discount_percentage, discount, total_sq_feet, number_of_parts, total_meters, channel_sq_feet, channel_cost, fabric_cost, dimout_meters, dimout_cost, total_cost, discounted_total, customer_id ,beforeDiscountPrice,afterDiscountPrice) VALUES ");
 						for (int j = 0; j < blindList.size(); j++) {
-							itemname = total = blind_type = width = height = per_sq_feet = per_meter = channel_per_sq_feet = fitting_cost = dimout_per_meter = discount_percentage = discount = total_sq_feet = number_of_parts = total_meters = channel_sq_feet = channel_cost = fabric_cost = dimout_meters = dimout_cost = total_cost = discounted_total = null;
+							itemname = total = blind_type = width = height = per_sq_feet = per_meter = channel_per_sq_feet = fitting_cost = dimout_per_meter = discount_percentage = discount = total_sq_feet = number_of_parts = total_meters = channel_sq_feet = channel_cost = fabric_cost = dimout_meters = dimout_cost = total_cost = discounted_total = beforeDiscountPrice = afterDiscountPrice = null;
 
 							values.append(values.length() == 0 ? "" : ",");
-							itemname = Common.checkNullAndEmpty(blindList.get(j).getName())
-									? blindList.get(j).getName()
+							itemname = Common.checkNullAndEmpty(blindList.get(j).getName()) ? blindList.get(j).getName()
 									: null;
 							total = Common.checkNullAndEmpty(blindList.get(j).getTotal()) ? blindList.get(j).getTotal()
 									: null;
@@ -299,13 +341,21 @@ public class QuationServiceImpl implements QuationSerive {
 									? blindList.get(j).getDiscountedTotal()
 									: null;
 
+							afterDiscountPrice = Common.checkNullAndEmpty(curtList.get(j).getAfterDiscountPrice())
+									? curtList.get(j).getAfterDiscountPrice()
+									: null;
+							beforeDiscountPrice = Common.checkNullAndEmpty(curtList.get(j).getBeforeDiscountPrice())
+									? curtList.get(j).getBeforeDiscountPrice()
+									: null;
+
 							values.append("(" + blindid + ", '" + itemname + "' , " + total + ", '" + blind_type + "', "
 									+ width + ", " + height + ", " + per_sq_feet + ", " + per_meter + ", "
 									+ channel_per_sq_feet + ", " + fitting_cost + ", " + dimout_per_meter + ", "
 									+ discount_percentage + ", " + discount + ", " + total_sq_feet + ", "
 									+ number_of_parts + ", " + total_meters + ", " + channel_sq_feet + ", "
 									+ channel_cost + ", " + fabric_cost + ", " + dimout_meters + ", " + dimout_cost
-									+ ", " + total_cost + ", " + discounted_total + ", " + customerid + ")");
+									+ ", " + total_cost + ", " + discounted_total + ", " + customerid + " , "
+									+ beforeDiscountPrice + "," + afterDiscountPrice + ")");
 
 							blindid++;
 
@@ -326,14 +376,14 @@ public class QuationServiceImpl implements QuationSerive {
 
 						String itemname, total, company, width, height, displayHeight, pricePerUnit, transportationFee,
 								discountPercentage, area, materialCost, discountAmount, discount,
-								discountedMaterialCost;
+								discountedMaterialCost, beforeDiscountPrice, afterDiscountPrice;
 
 						StringBuilder insertString = new StringBuilder();
 						StringBuilder values = new StringBuilder();
 						insertString.append(
-								"INSERT INTO mattress (mattressid, itemname, total, company, width, height, displayHeight, pricePerUnit, transportationFee, discountPercentage, area, materialCost, discountAmount, discount, discountedMaterialCost, customer_id ) VALUES ");
+								"INSERT INTO mattress (mattressid, itemname, total, company, width, height, displayHeight, pricePerUnit, transportationFee, discountPercentage, area, materialCost, discountAmount, discount, discountedMaterialCost, customer_id , beforeDiscountPrice,afterDiscountPrice ) VALUES ");
 						for (int j = 0; j < mattList.size(); j++) {
-							itemname = total = company = width = height = displayHeight = pricePerUnit = transportationFee = discountPercentage = area = materialCost = discountAmount = discount = discountedMaterialCost = null;
+							itemname = total = company = width = height = displayHeight = pricePerUnit = transportationFee = discountPercentage = area = materialCost = discountAmount = discount = discountedMaterialCost = beforeDiscountPrice = afterDiscountPrice = null;
 
 							values.append(values.length() == 0 ? "" : ",");
 							itemname = Common.checkNullAndEmpty(mattList.get(j).getItemname())
@@ -375,6 +425,12 @@ public class QuationServiceImpl implements QuationSerive {
 									.checkNullAndEmpty(mattList.get(j).getDiscountedMaterialCost())
 											? mattList.get(j).getDiscountedMaterialCost()
 											: null;
+							afterDiscountPrice = Common.checkNullAndEmpty(curtList.get(j).getAfterDiscountPrice())
+									? curtList.get(j).getAfterDiscountPrice()
+									: null;
+							beforeDiscountPrice = Common.checkNullAndEmpty(curtList.get(j).getBeforeDiscountPrice())
+									? curtList.get(j).getBeforeDiscountPrice()
+									: null;
 
 							values.append("(").append(mattressid).append(", '").append(itemname).append("', '")
 									.append(total).append("', '").append(company).append("', ").append(width)
@@ -383,7 +439,8 @@ public class QuationServiceImpl implements QuationSerive {
 									.append(discountPercentage).append(", ").append(area).append(", ")
 									.append(materialCost).append(", ").append(discountAmount).append(", ")
 									.append(discount).append(", ").append(discountedMaterialCost).append(", ")
-									.append(customerid).append(")");
+									.append(customerid).append(", ").append(beforeDiscountPrice).append(", ")
+									.append(afterDiscountPrice).append(")");
 
 							mattressid++;
 
@@ -518,9 +575,8 @@ public class QuationServiceImpl implements QuationSerive {
 						+ "    channel_per_sq_feet AS channelPerSqFeet, fitting_cost AS fittingCost, dimout_per_meter AS dimoutPerMeter, discount_percentage AS discountPercentage, discount AS discount,"
 						+ "    total_sq_feet AS totalSqFeet, number_of_parts AS numberOfParts, total_meters AS totalMeters, channel_sq_feet AS channelSqFeet,"
 						+ "    channel_cost AS channelCost, fabric_cost AS fabricCost, dimout_meters AS dimoutMeters,"
-						+ "    dimout_cost AS dimoutCost, total_cost AS totalCost, discounted_total AS discountedTotal"
-						+ " FROM "
-						+ "    blind b  WHERE CUSTOMER_ID = " + customer_id;
+						+ "    dimout_cost AS dimoutCost, total_cost AS totalCost, discounted_total AS discountedTotal, beforeDiscountPrice, afterDiscountPrice"
+						+ " FROM " + "    blind b  WHERE CUSTOMER_ID = " + customer_id;
 				String queryMattress = " SELECT * FROM mattress M WHERE CUSTOMER_ID = " + customer_id;
 				String querySofa = " SELECT * FROM sofa S WHERE CUSTOMER_ID = " + customer_id;
 
