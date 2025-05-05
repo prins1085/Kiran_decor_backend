@@ -23,6 +23,91 @@ public class QuationDTO {
 		public String fabricMeter;
 		public String fabricPrice;
 		public String sizeInFeet;
+		
+		public List<SofaRPTData> reportsData;
+
+		public static class SofaRPTData {
+			public String DESCRIPTION;
+			public String QTY;
+			public String RATE;
+			public String TOTAL;
+			public String DISCOUNT;
+			public String FINAL_TOTAL;
+			public String TYPE;
+			public String QTYPE;
+
+			public String getDESCRIPTION() {
+				return DESCRIPTION;
+			}
+
+			public void setDESCRIPTION(String dESCRIPTION) {
+				DESCRIPTION = dESCRIPTION;
+			}
+
+			public String getQTY() {
+				return QTY;
+			}
+
+			public void setQTY(String qTY) {
+				QTY = qTY;
+			}
+
+			public String getRATE() {
+				return RATE;
+			}
+
+			public void setRATE(String rATE) {
+				RATE = rATE;
+			}
+
+			public String getTOTAL() {
+				return TOTAL;
+			}
+
+			public void setTOTAL(String tOTAL) {
+				TOTAL = tOTAL;
+			}
+
+			public String getDISCOUNT() {
+				return DISCOUNT;
+			}
+
+			public void setDISCOUNT(String dISCOUNT) {
+				DISCOUNT = dISCOUNT;
+			}
+
+			public String getFINAL_TOTAL() {
+				return FINAL_TOTAL;
+			}
+
+			public void setFINAL_TOTAL(String fINAL_TOTAL) {
+				FINAL_TOTAL = fINAL_TOTAL;
+			}
+
+			public String getTYPE() {
+				return TYPE;
+			}
+
+			public void setTYPE(String tYPE) {
+				TYPE = tYPE;
+			}
+
+			public String getQTYPE() {
+				return QTYPE;
+			}
+
+			public void setQTYPE(String qTYPE) {
+				QTYPE = qTYPE;
+			}
+		}
+
+		public List<SofaRPTData> getReportsData() {
+			return reportsData;
+		}
+
+		public void setReportsData(List<SofaRPTData> reportsData) {
+			this.reportsData = reportsData;
+		}
 
 		public String getSofaid() {
 			return sofaid;
@@ -140,6 +225,112 @@ public class QuationDTO {
 		public String discountedMaterialCost;
 		public String beforeDiscountPrice;
 		public String afterDiscountPrice;
+		public String product;
+		public String size;
+		
+		
+
+		public List<MattressRPTData> reportsData;
+
+		public static class MattressRPTData {
+			public String DESCRIPTION;
+			public String QTY;
+			public String RATE;
+			public String TOTAL;
+			public String DISCOUNT;
+			public String FINAL_TOTAL;
+			public String TYPE;
+			public String QTYPE;
+
+			public String getDESCRIPTION() {
+				return DESCRIPTION;
+			}
+
+			public void setDESCRIPTION(String dESCRIPTION) {
+				DESCRIPTION = dESCRIPTION;
+			}
+
+			public String getQTY() {
+				return QTY;
+			}
+
+			public void setQTY(String qTY) {
+				QTY = qTY;
+			}
+
+			public String getRATE() {
+				return RATE;
+			}
+
+			public void setRATE(String rATE) {
+				RATE = rATE;
+			}
+
+			public String getTOTAL() {
+				return TOTAL;
+			}
+
+			public void setTOTAL(String tOTAL) {
+				TOTAL = tOTAL;
+			}
+
+			public String getDISCOUNT() {
+				return DISCOUNT;
+			}
+
+			public void setDISCOUNT(String dISCOUNT) {
+				DISCOUNT = dISCOUNT;
+			}
+
+			public String getFINAL_TOTAL() {
+				return FINAL_TOTAL;
+			}
+
+			public void setFINAL_TOTAL(String fINAL_TOTAL) {
+				FINAL_TOTAL = fINAL_TOTAL;
+			}
+
+			public String getTYPE() {
+				return TYPE;
+			}
+
+			public void setTYPE(String tYPE) {
+				TYPE = tYPE;
+			}
+
+			public String getQTYPE() {
+				return QTYPE;
+			}
+
+			public void setQTYPE(String qTYPE) {
+				QTYPE = qTYPE;
+			}
+		}
+
+		public List<MattressRPTData> getReportsData() {
+			return reportsData;
+		}
+
+		public void setReportsData(List<MattressRPTData> reportsData) {
+			this.reportsData = reportsData;
+		}
+		
+
+		public String getProduct() {
+			return product;
+		}
+
+		public void setProduct(String product) {
+			this.product = product;
+		}
+
+		public String getSize() {
+			return size;
+		}
+
+		public void setSize(String size) {
+			this.size = size;
+		}
 
 		public String getBeforeDiscountPrice() {
 			return beforeDiscountPrice;
@@ -305,6 +496,91 @@ public class QuationDTO {
 		public String discountedTotal;
 		public String beforeDiscountPrice;
 		public String afterDiscountPrice;
+
+		public List<BlindRPTData> reportsData;
+
+		public static class BlindRPTData {
+			public String DESCRIPTION;
+			public String QTY;
+			public String RATE;
+			public String TOTAL;
+			public String DISCOUNT;
+			public String FINAL_TOTAL;
+			public String TYPE;
+			public String QTYPE;
+
+			public String getDESCRIPTION() {
+				return DESCRIPTION;
+			}
+
+			public void setDESCRIPTION(String dESCRIPTION) {
+				DESCRIPTION = dESCRIPTION;
+			}
+
+			public String getQTY() {
+				return QTY;
+			}
+
+			public void setQTY(String qTY) {
+				QTY = qTY;
+			}
+
+			public String getRATE() {
+				return RATE;
+			}
+
+			public void setRATE(String rATE) {
+				RATE = rATE;
+			}
+
+			public String getTOTAL() {
+				return TOTAL;
+			}
+
+			public void setTOTAL(String tOTAL) {
+				TOTAL = tOTAL;
+			}
+
+			public String getDISCOUNT() {
+				return DISCOUNT;
+			}
+
+			public void setDISCOUNT(String dISCOUNT) {
+				DISCOUNT = dISCOUNT;
+			}
+
+			public String getFINAL_TOTAL() {
+				return FINAL_TOTAL;
+			}
+
+			public void setFINAL_TOTAL(String fINAL_TOTAL) {
+				FINAL_TOTAL = fINAL_TOTAL;
+			}
+
+			public String getTYPE() {
+				return TYPE;
+			}
+
+			public void setTYPE(String tYPE) {
+				TYPE = tYPE;
+			}
+
+			public String getQTYPE() {
+				return QTYPE;
+			}
+
+			public void setQTYPE(String qTYPE) {
+				QTYPE = qTYPE;
+			}
+		}
+
+		public List<BlindRPTData> getReportsData() {
+			return reportsData;
+		}
+
+		public void setReportsData(List<BlindRPTData> reportsData) {
+			this.reportsData = reportsData;
+		}
 
 		public String getBeforeDiscountPrice() {
 			return beforeDiscountPrice;
@@ -539,6 +815,90 @@ public class QuationDTO {
 		public String motorPrice2;
 		public String remotePrice2;
 		public String fittingCost2;
+		public List<CurtainRPTData> reportsData;
+
+		public static class CurtainRPTData {
+			public String DESCRIPTION;
+			public String QTY;
+			public String RATE;
+			public String TOTAL;
+			public String DISCOUNT;
+			public String FINAL_TOTAL;
+			public String TYPE;
+			public String QTYPE;
+
+			public String getDESCRIPTION() {
+				return DESCRIPTION;
+			}
+
+			public void setDESCRIPTION(String dESCRIPTION) {
+				DESCRIPTION = dESCRIPTION;
+			}
+
+			public String getQTY() {
+				return QTY;
+			}
+
+			public void setQTY(String qTY) {
+				QTY = qTY;
+			}
+
+			public String getRATE() {
+				return RATE;
+			}
+
+			public void setRATE(String rATE) {
+				RATE = rATE;
+			}
+
+			public String getTOTAL() {
+				return TOTAL;
+			}
+
+			public void setTOTAL(String tOTAL) {
+				TOTAL = tOTAL;
+			}
+
+			public String getDISCOUNT() {
+				return DISCOUNT;
+			}
+
+			public void setDISCOUNT(String dISCOUNT) {
+				DISCOUNT = dISCOUNT;
+			}
+
+			public String getFINAL_TOTAL() {
+				return FINAL_TOTAL;
+			}
+
+			public void setFINAL_TOTAL(String fINAL_TOTAL) {
+				FINAL_TOTAL = fINAL_TOTAL;
+			}
+
+			public String getTYPE() {
+				return TYPE;
+			}
+
+			public void setTYPE(String tYPE) {
+				TYPE = tYPE;
+			}
+
+			public String getQTYPE() {
+				return QTYPE;
+			}
+
+			public void setQTYPE(String qTYPE) {
+				QTYPE = qTYPE;
+			}
+		}
+
+		public List<CurtainRPTData> getReportsData() {
+			return reportsData;
+		}
+
+		public void setReportsData(List<CurtainRPTData> reportsData) {
+			this.reportsData = reportsData;
+		}
 
 		public String getName() {
 			return name;

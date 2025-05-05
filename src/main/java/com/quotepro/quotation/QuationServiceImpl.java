@@ -112,11 +112,13 @@ public class QuationServiceImpl implements QuationSerive {
 						String deleteBlindQuery = "DELETE FROM blind WHERE CUSTOMER_ID =" + customerid;
 						String deleteMattressQuery = "DELETE FROM mattress WHERE CUSTOMER_ID =" + customerid;
 						String deleteSofaQuery = "DELETE FROM sofa WHERE CUSTOMER_ID =" + customerid;
+						String deleteinvoice_itemsQuery = "DELETE FROM invoice_items WHERE CUSTOMER_ID =" + customerid;
 
 						manager.createNativeQuery(deleteCurtainQuery).executeUpdate();
 						manager.createNativeQuery(deleteBlindQuery).executeUpdate();
 						manager.createNativeQuery(deleteMattressQuery).executeUpdate();
 						manager.createNativeQuery(deleteSofaQuery).executeUpdate();
+						manager.createNativeQuery(deleteinvoice_itemsQuery).executeUpdate();
 
 					} else { /* Insert */
 						customerid = dbUtils.getMaxId("customers", "customer_id", null, manager);
@@ -132,6 +134,10 @@ public class QuationServiceImpl implements QuationSerive {
 					// ========================== Insert Curtain ===================//
 					List<QuationDTO.Curtain> curtList = dto.getCurtains();
 					if (curtList.size() > 0) {
+
+						Integer invoiceid = Integer
+								.parseInt(dbUtils.getMaxId("invoice_items", "invoiceid", null, manager));
+
 						String itemname, total, width, height, perMeter, labor, channelPerFeet, dimoutPerMeter,
 								sheerPerMeter, sheerHeight, sheerDiscountPercentage, panelMeters, panelPerMeter,
 								channelType, motorPrice, remotePrice, fittingCost, materialDiscountPercentage,
@@ -252,6 +258,55 @@ public class QuationServiceImpl implements QuationSerive {
 							if (itemname == null && height == null && total == null && perMeter == null) {
 								flag = false;
 							}
+
+							List<QuationDTO.Curtain.CurtainRPTData> curtainRPTDatas = dto.getCurtains().get(j)
+									.getReportsData();
+							if (curtainRPTDatas.size() > 0) {
+								String rptdescription, rptqty, rptrate, rpttotal, rptdiscount, rptfinal_total, rpttype,
+										rptqtype;
+
+								StringBuilder rptinsertString = new StringBuilder();
+								StringBuilder rptvalues = new StringBuilder();
+								rptinsertString.append(
+										"INSERT INTO invoice_items (invoiceid, description,  qty, rate, total, discount, final_total , type,  qtype, customer_id  ) VALUES ");
+
+								for (int k = 0; k < curtainRPTDatas.size(); k++) {
+									rptdescription = rptqty = rptrate = rpttotal = rptdiscount = rptfinal_total = rpttype = rptqtype = null;
+									rptvalues.append(rptvalues.length() == 0 ? "" : ",");
+
+									rptdescription = Common.checkNullAndEmpty(curtainRPTDatas.get(k).getDESCRIPTION())
+											? itemname.toUpperCase() + " " + curtainRPTDatas.get(k).getDESCRIPTION()
+											: null;
+									rptqty = Common.checkNullAndEmpty(curtainRPTDatas.get(k).getQTY())
+											? curtainRPTDatas.get(k).getQTY()
+											: null;
+									rptrate = Common.checkNullAndEmpty(curtainRPTDatas.get(k).getRATE())
+											? curtainRPTDatas.get(k).getRATE()
+											: null;
+									rpttotal = Common.checkNullAndEmpty(curtainRPTDatas.get(k).getTOTAL())
+											? curtainRPTDatas.get(k).getTOTAL()
+											: null;
+									rptdiscount = Common.checkNullAndEmpty(curtainRPTDatas.get(k).getDISCOUNT())
+											? curtainRPTDatas.get(k).getDISCOUNT()
+											: null;
+									rptfinal_total = Common.checkNullAndEmpty(curtainRPTDatas.get(k).getFINAL_TOTAL())
+											? curtainRPTDatas.get(k).getFINAL_TOTAL()
+											: null;
+									rpttype = Common.checkNullAndEmpty(curtainRPTDatas.get(k).getTYPE())
+											? curtainRPTDatas.get(k).getTYPE()
+											: null;
+									rptqtype = "CURTAIN";
+
+									rptvalues.append("(" + invoiceid + ", '" + rptdescription + "'," + rptqty + ","
+											+ rptrate + "," + rpttotal + "," + rptdiscount + "," + rptfinal_total + ",'"
+											+ rpttype + "','" + rptqtype + "'," + customerid + " )");
+
+									invoiceid++;
+								}
+
+								rptinsertString.append(rptvalues);
+								manager.createNativeQuery(rptinsertString.toString()).executeUpdate();
+							}
 						}
 
 						if (flag) {
@@ -263,6 +318,10 @@ public class QuationServiceImpl implements QuationSerive {
 					// ========================== Insert Blind ===================//
 					List<QuationDTO.Blind> blindList = dto.getBlinds();
 					if (blindList.size() > 0) {
+
+						Integer invoiceid = Integer
+								.parseInt(dbUtils.getMaxId("invoice_items", "invoiceid", null, manager));
+
 						String itemname, total, blind_type, width, height, per_sq_feet, per_meter, channel_per_sq_feet,
 								fitting_cost, dimout_per_meter, discount_percentage, discount, total_sq_feet,
 								number_of_parts, total_meters, channel_sq_feet, channel_cost, fabric_cost,
@@ -341,11 +400,11 @@ public class QuationServiceImpl implements QuationSerive {
 									? blindList.get(j).getDiscountedTotal()
 									: null;
 
-							afterDiscountPrice = Common.checkNullAndEmpty(curtList.get(j).getAfterDiscountPrice())
-									? curtList.get(j).getAfterDiscountPrice()
+							afterDiscountPrice = Common.checkNullAndEmpty(blindList.get(j).getAfterDiscountPrice())
+									? blindList.get(j).getAfterDiscountPrice()
 									: null;
-							beforeDiscountPrice = Common.checkNullAndEmpty(curtList.get(j).getBeforeDiscountPrice())
-									? curtList.get(j).getBeforeDiscountPrice()
+							beforeDiscountPrice = Common.checkNullAndEmpty(blindList.get(j).getBeforeDiscountPrice())
+									? blindList.get(j).getBeforeDiscountPrice()
 									: null;
 
 							values.append("(" + blindid + ", '" + itemname + "' , " + total + ", '" + blind_type + "', "
@@ -362,6 +421,55 @@ public class QuationServiceImpl implements QuationSerive {
 							if (itemname == null && height == null && total == null) {
 								flag = false;
 							}
+
+							List<QuationDTO.Blind.BlindRPTData> curtainRPTDatas = dto.getBlinds().get(j)
+									.getReportsData();
+							if (curtainRPTDatas.size() > 0) {
+								String rptdescription, rptqty, rptrate, rpttotal, rptdiscount, rptfinal_total, rpttype,
+										rptqtype;
+
+								StringBuilder rptinsertString = new StringBuilder();
+								StringBuilder rptvalues = new StringBuilder();
+								rptinsertString.append(
+										"INSERT INTO invoice_items (invoiceid, description,  qty, rate, total, discount, final_total , type,  qtype, customer_id  ) VALUES ");
+
+								for (int k = 0; k < curtainRPTDatas.size(); k++) {
+									rptdescription = rptqty = rptrate = rpttotal = rptdiscount = rptfinal_total = rpttype = rptqtype = null;
+									rptvalues.append(rptvalues.length() == 0 ? "" : ",");
+
+									rptdescription = Common.checkNullAndEmpty(curtainRPTDatas.get(k).getDESCRIPTION())
+											? itemname.toUpperCase() + " " + curtainRPTDatas.get(k).getDESCRIPTION()
+											: null;
+									rptqty = Common.checkNullAndEmpty(curtainRPTDatas.get(k).getQTY())
+											? curtainRPTDatas.get(k).getQTY()
+											: null;
+									rptrate = Common.checkNullAndEmpty(curtainRPTDatas.get(k).getRATE())
+											? curtainRPTDatas.get(k).getRATE()
+											: null;
+									rpttotal = Common.checkNullAndEmpty(curtainRPTDatas.get(k).getTOTAL())
+											? curtainRPTDatas.get(k).getTOTAL()
+											: null;
+									rptdiscount = Common.checkNullAndEmpty(curtainRPTDatas.get(k).getDISCOUNT())
+											? curtainRPTDatas.get(k).getDISCOUNT()
+											: null;
+									rptfinal_total = Common.checkNullAndEmpty(curtainRPTDatas.get(k).getFINAL_TOTAL())
+											? curtainRPTDatas.get(k).getFINAL_TOTAL()
+											: null;
+									rpttype = Common.checkNullAndEmpty(curtainRPTDatas.get(k).getTYPE())
+											? curtainRPTDatas.get(k).getTYPE()
+											: null;
+									rptqtype = "BLIND";
+
+									rptvalues.append("(" + invoiceid + ", '" + rptdescription + "'," + rptqty + ","
+											+ rptrate + "," + rpttotal + "," + rptdiscount + "," + rptfinal_total + ",'"
+											+ rpttype + "','" + rptqtype + "'," + customerid + " )");
+
+									invoiceid++;
+								}
+
+								rptinsertString.append(rptvalues);
+								manager.createNativeQuery(rptinsertString.toString()).executeUpdate();
+							}
 						}
 
 						if (flag) {
@@ -374,16 +482,19 @@ public class QuationServiceImpl implements QuationSerive {
 					List<QuationDTO.Mattress> mattList = dto.getMattresses();
 					if (mattList.size() > 0) {
 
+						Integer invoiceid = Integer
+								.parseInt(dbUtils.getMaxId("invoice_items", "invoiceid", null, manager));
+
 						String itemname, total, company, width, height, displayHeight, pricePerUnit, transportationFee,
 								discountPercentage, area, materialCost, discountAmount, discount,
-								discountedMaterialCost, beforeDiscountPrice, afterDiscountPrice;
+								discountedMaterialCost, beforeDiscountPrice, afterDiscountPrice, product, size;
 
 						StringBuilder insertString = new StringBuilder();
 						StringBuilder values = new StringBuilder();
 						insertString.append(
-								"INSERT INTO mattress (mattressid, itemname, total, company, width, height, displayHeight, pricePerUnit, transportationFee, discountPercentage, area, materialCost, discountAmount, discount, discountedMaterialCost, customer_id , beforeDiscountPrice,afterDiscountPrice ) VALUES ");
+								"INSERT INTO mattress (mattressid, itemname, total, company, width, height, displayHeight, pricePerUnit, transportationFee, discountPercentage, area, materialCost, discountAmount, discount, discountedMaterialCost, customer_id , beforeDiscountPrice,afterDiscountPrice , product, size) VALUES ");
 						for (int j = 0; j < mattList.size(); j++) {
-							itemname = total = company = width = height = displayHeight = pricePerUnit = transportationFee = discountPercentage = area = materialCost = discountAmount = discount = discountedMaterialCost = beforeDiscountPrice = afterDiscountPrice = null;
+							itemname = total = company = width = height = displayHeight = pricePerUnit = transportationFee = discountPercentage = area = materialCost = discountAmount = discount = discountedMaterialCost = beforeDiscountPrice = afterDiscountPrice = product = size = null;
 
 							values.append(values.length() == 0 ? "" : ",");
 							itemname = Common.checkNullAndEmpty(mattList.get(j).getItemname())
@@ -425,12 +536,18 @@ public class QuationServiceImpl implements QuationSerive {
 									.checkNullAndEmpty(mattList.get(j).getDiscountedMaterialCost())
 											? mattList.get(j).getDiscountedMaterialCost()
 											: null;
-							afterDiscountPrice = Common.checkNullAndEmpty(curtList.get(j).getAfterDiscountPrice())
-									? curtList.get(j).getAfterDiscountPrice()
+							afterDiscountPrice = Common.checkNullAndEmpty(mattList.get(j).getAfterDiscountPrice())
+									? mattList.get(j).getAfterDiscountPrice()
 									: null;
-							beforeDiscountPrice = Common.checkNullAndEmpty(curtList.get(j).getBeforeDiscountPrice())
-									? curtList.get(j).getBeforeDiscountPrice()
+							beforeDiscountPrice = Common.checkNullAndEmpty(mattList.get(j).getBeforeDiscountPrice())
+									? mattList.get(j).getBeforeDiscountPrice()
 									: null;
+							product = Common.checkNullAndEmpty(mattList.get(j).getProduct())
+									? mattList.get(j).getProduct()
+											: null;
+							size = Common.checkNullAndEmpty(mattList.get(j).getSize())
+									? mattList.get(j).getSize()
+											: null;
 
 							values.append("(").append(mattressid).append(", '").append(itemname).append("', '")
 									.append(total).append("', '").append(company).append("', ").append(width)
@@ -440,12 +557,62 @@ public class QuationServiceImpl implements QuationSerive {
 									.append(materialCost).append(", ").append(discountAmount).append(", ")
 									.append(discount).append(", ").append(discountedMaterialCost).append(", ")
 									.append(customerid).append(", ").append(beforeDiscountPrice).append(", ")
-									.append(afterDiscountPrice).append(")");
+									.append(afterDiscountPrice)
+									.append(", '").append(product).append("',").append(size).append(")");
 
 							mattressid++;
 
 							if (itemname == null && height == null && total == null) {
 								flag = false;
+							}
+
+							List<QuationDTO.Mattress.MattressRPTData> curtainRPTDatas = dto.getMattresses().get(j)
+									.getReportsData();
+							if (curtainRPTDatas.size() > 0) {
+								String rptdescription, rptqty, rptrate, rpttotal, rptdiscount, rptfinal_total, rpttype,
+										rptqtype;
+
+								StringBuilder rptinsertString = new StringBuilder();
+								StringBuilder rptvalues = new StringBuilder();
+								rptinsertString.append(
+										"INSERT INTO invoice_items (invoiceid, description,  qty, rate, total, discount, final_total , type,  qtype, customer_id  ) VALUES ");
+
+								for (int k = 0; k < curtainRPTDatas.size(); k++) {
+									rptdescription = rptqty = rptrate = rpttotal = rptdiscount = rptfinal_total = rpttype = rptqtype = null;
+									rptvalues.append(rptvalues.length() == 0 ? "" : ",");
+
+									rptdescription = Common.checkNullAndEmpty(curtainRPTDatas.get(k).getDESCRIPTION())
+											? itemname.toUpperCase() + " " + curtainRPTDatas.get(k).getDESCRIPTION()
+											: null;
+									rptqty = Common.checkNullAndEmpty(curtainRPTDatas.get(k).getQTY())
+											? curtainRPTDatas.get(k).getQTY()
+											: null;
+									rptrate = Common.checkNullAndEmpty(curtainRPTDatas.get(k).getRATE())
+											? curtainRPTDatas.get(k).getRATE()
+											: null;
+									rpttotal = Common.checkNullAndEmpty(curtainRPTDatas.get(k).getTOTAL())
+											? curtainRPTDatas.get(k).getTOTAL()
+											: null;
+									rptdiscount = Common.checkNullAndEmpty(curtainRPTDatas.get(k).getDISCOUNT())
+											? curtainRPTDatas.get(k).getDISCOUNT()
+											: null;
+									rptfinal_total = Common.checkNullAndEmpty(curtainRPTDatas.get(k).getFINAL_TOTAL())
+											? curtainRPTDatas.get(k).getFINAL_TOTAL()
+											: null;
+									rpttype = Common.checkNullAndEmpty(curtainRPTDatas.get(k).getTYPE())
+											? curtainRPTDatas.get(k).getTYPE()
+											: null;
+									rptqtype = "MATTRESS";
+
+									rptvalues.append("(" + invoiceid + ", '" + rptdescription + "'," + rptqty + ","
+											+ rptrate + "," + rpttotal + "," + rptdiscount + "," + rptfinal_total + ",'"
+											+ rpttype + "','" + rptqtype + "'," + customerid + " )");
+
+									invoiceid++;
+								}
+
+								rptinsertString.append(rptvalues);
+								manager.createNativeQuery(rptinsertString.toString()).executeUpdate();
 							}
 						}
 
@@ -458,6 +625,9 @@ public class QuationServiceImpl implements QuationSerive {
 					// ========================== Insert Sofa ===================//
 					List<QuationDTO.Sofa> sofList = dto.getSofas();
 					if (sofList.size() > 0) {
+
+						Integer invoiceid = Integer
+								.parseInt(dbUtils.getMaxId("invoice_items", "invoiceid", null, manager));
 
 						String itemname, total, sofaSize, designPattern, pricePerFoot, transportationFee, leatherMeter,
 								leatherPrice, fabricMeter, fabricPrice, sizeInFeet;
@@ -515,6 +685,54 @@ public class QuationServiceImpl implements QuationSerive {
 
 							if (itemname == null && total == null) {
 								flag = false;
+							}
+
+							List<QuationDTO.Sofa.SofaRPTData> curtainRPTDatas = dto.getSofas().get(j).getReportsData();
+							if (curtainRPTDatas.size() > 0) {
+								String rptdescription, rptqty, rptrate, rpttotal, rptdiscount, rptfinal_total, rpttype,
+										rptqtype;
+
+								StringBuilder rptinsertString = new StringBuilder();
+								StringBuilder rptvalues = new StringBuilder();
+								rptinsertString.append(
+										"INSERT INTO invoice_items (invoiceid, description,  qty, rate, total, discount, final_total , type,  qtype, customer_id  ) VALUES ");
+
+								for (int k = 0; k < curtainRPTDatas.size(); k++) {
+									rptdescription = rptqty = rptrate = rpttotal = rptdiscount = rptfinal_total = rpttype = rptqtype = null;
+									rptvalues.append(rptvalues.length() == 0 ? "" : ",");
+
+									rptdescription = Common.checkNullAndEmpty(curtainRPTDatas.get(k).getDESCRIPTION())
+											? itemname.toUpperCase() + " " + curtainRPTDatas.get(k).getDESCRIPTION()
+											: null;
+									rptqty = Common.checkNullAndEmpty(curtainRPTDatas.get(k).getQTY())
+											? curtainRPTDatas.get(k).getQTY()
+											: null;
+									rptrate = Common.checkNullAndEmpty(curtainRPTDatas.get(k).getRATE())
+											? curtainRPTDatas.get(k).getRATE()
+											: null;
+									rpttotal = Common.checkNullAndEmpty(curtainRPTDatas.get(k).getTOTAL())
+											? curtainRPTDatas.get(k).getTOTAL()
+											: null;
+									rptdiscount = Common.checkNullAndEmpty(curtainRPTDatas.get(k).getDISCOUNT())
+											? curtainRPTDatas.get(k).getDISCOUNT()
+											: null;
+									rptfinal_total = Common.checkNullAndEmpty(curtainRPTDatas.get(k).getFINAL_TOTAL())
+											? curtainRPTDatas.get(k).getFINAL_TOTAL()
+											: null;
+									rpttype = Common.checkNullAndEmpty(curtainRPTDatas.get(k).getTYPE())
+											? curtainRPTDatas.get(k).getTYPE()
+											: null;
+									rptqtype = "SOFA";
+
+									rptvalues.append("(" + invoiceid + ", '" + rptdescription + "'," + rptqty + ","
+											+ rptrate + "," + rpttotal + "," + rptdiscount + "," + rptfinal_total + ",'"
+											+ rpttype + "','" + rptqtype + "'," + customerid + " )");
+
+									invoiceid++;
+								}
+
+								rptinsertString.append(rptvalues);
+								manager.createNativeQuery(rptinsertString.toString()).executeUpdate();
 							}
 						}
 
