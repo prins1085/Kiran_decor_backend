@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.21.0.final using JasperReports Library version 6.21.0-4f56c4f36cd19e17675219a9ac4692d5f0f13b06  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="QuotationReport" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="13acf49e-4913-4d1b-bccc-113817ad15d1">
+	<property name="ireport.zoom" value="1.6105100000000008"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="style1" mode="Transparent" forecolor="#000000" backcolor="#999999"/>
+	<parameter name="SQuery" class="net.sf.jasperreports.engine.JREmptyDataSource">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="logopath" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[$P!{SQuery}]]>
+	</queryString>
+	<field name="disc" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="qty" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="rate" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="total" class="java.math.BigDecimal"/>
+	<field name="customer_name" class="java.lang.String"/>
+	<field name="mobile_number" class="java.lang.String"/>
+	<field name="discount" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="final_total" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="TTOTAL" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{final_total}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="206" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="48" width="555" height="1" uuid="4b63297b-e883-4772-9c0d-0ff2c1d2746a"/>
+			</line>
+			<image hAlign="Left" vAlign="Middle" isLazy="true">
+				<reportElement x="217" y="0" width="120" height="39" uuid="306eafe3-b7f6-4076-99ca-080b364e4a31"/>
+				<imageExpression><![CDATA[$P{logopath}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="2" y="51" width="55" height="19" uuid="8c9e4a80-6e38-4b28-bd85-94a9d457f0c2"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Date"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2" y="71" width="98" height="19" uuid="c2c2a578-c13d-425b-bfb5-fc5ef4f7a43c"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="282" y="51" width="55" height="19" uuid="c4e0f529-41d3-4ad0-a163-34665f17e0d7"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Order Number"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="282" y="70" width="96" height="20" uuid="c3c41e14-e200-41ee-a810-40e15f5c0282"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+			</textField>
+			<line>
+				<reportElement x="0" y="93" width="555" height="1" uuid="a342bd54-b78e-49c0-b15e-b3521c84fa24"/>
+			</line>
+			<textField>
+				<reportElement x="2" y="97" width="99" height="19" uuid="071aa725-3fc1-4b5e-bed6-948a919012a5"/>
+				<textElement verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{customer_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2" y="118" width="158" height="31" uuid="29e80655-fbe2-491c-a067-c8128cb04d28"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["800 Warehouse Ln, Atlanta, GA 30301"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2" y="172" width="158" height="27" uuid="0122fe84-6cf8-4426-a66e-e808a40cee09"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA["900 Retail Blvd, Charlotte, NC 28201"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2" y="152" width="158" height="19" uuid="02cc2f24-0925-4615-8279-51fb5c7feee9"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Shipping Address"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="282" y="96" width="104" height="22" uuid="a48eb2ea-8cad-4862-aa21-96abf048fea8"/>
+				<textElement verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Kiran Decor"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="282" y="118" width="218" height="42" uuid="06a42e82-8977-4442-b68c-1af61cdc487a"/>
+				<textElement verticalAlignment="Top">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["49,Avalon The Commercial Hub,Opp Patidar Samaj Wadi, Ambatavadi,Katargam,Surat-395004 Gujrat."]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="282" y="162" width="104" height="18" uuid="9dff6799-5551-4c69-8270-dbd9e9e343f2"/>
+				<textElement verticalAlignment="Top">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["MO : "]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="203" width="555" height="1" uuid="c79a3ae4-0929-46df-8e82-14fa50abd3c8"/>
+			</line>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="31" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="1" width="556" height="28" forecolor="#555555" backcolor="#555555" uuid="628a0083-2eda-4f72-8c06-2f6c7c663e57"/>
+			</rectangle>
+			<staticText>
+				<reportElement mode="Transparent" x="6" y="7" width="41" height="15" forecolor="#FFFFFF" backcolor="#FFFFFF" uuid="9bec185d-ad1c-46a3-bded-436e15b66445"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SR.NO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="57" y="7" width="113" height="15" forecolor="#FFFFFF" backcolor="#FFFFFF" uuid="b492a94b-d213-45b9-9879-e5e23cc6db49"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DESCRIPTION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="180" y="7" width="53" height="15" forecolor="#FFFFFF" backcolor="#FFFFFF" uuid="b5b55256-0bfd-4a25-af2d-4c9454508e1b"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[QTY]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="240" y="7" width="73" height="15" forecolor="#FFFFFF" backcolor="#FFFFFF" uuid="4d522393-54af-4d4d-bcda-e522d27a2958"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[RATE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="320" y="7" width="75" height="15" forecolor="#FFFFFF" backcolor="#FFFFFF" uuid="dbad9a5b-03ae-4bd9-98d1-2db769f9e207"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="402" y="7" width="52" height="15" forecolor="#FFFFFF" backcolor="#FFFFFF" uuid="4d957827-c5a6-43ed-a924-07e7a8e9fcfa"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DISCOUNT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="464" y="7" width="86" height="15" forecolor="#FFFFFF" backcolor="#FFFFFF" uuid="61e1e1e6-61ab-485b-8636-e887b7ac7308"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL AMOUNT]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="18" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="0" width="555" height="18" uuid="b50221b5-8254-440b-8c6f-1f0b138c9259"/>
+			</frame>
+			<textField>
+				<reportElement mode="Transparent" x="6" y="1" width="41" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="62b8c663-3172-4638-805a-7a53c060ce1a"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10"/>
+				</textElement>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="57" y="1" width="113" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="bc8d4173-88fd-4e42-b4f6-84df304a92e2"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{disc}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="180" y="1" width="53" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="caaaf1ac-f7a4-4544-9480-f5baf7a451dd"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{qty}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="240" y="1" width="73" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="c7865688-2206-40d5-94c4-058ec71cabc9"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{rate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="320" y="1" width="75" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="2ab54ce2-d14f-4e6a-ae6b-f9dcde7e95f5"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="402" y="1" width="52" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="5979cebd-9ef1-4350-8d51-84d08073b933"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{discount}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="464" y="1" width="86" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="8aa1ee37-f44c-47b3-a274-7d35679b9c78"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{final_total}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="7" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1" uuid="1133a906-5b71-476e-9f3e-bc97c97058c1"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<summary>
+		<band height="210" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="26" width="554" height="14" uuid="325abc62-2ec6-44e6-845e-b435499d65ca"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["BANK DETAIL :- KOTAK MAHINDRA BANK AC/NO-9446628304  (IFSC CODE-KKBK0002868)BRANCH-DABHOLI SURAT"]]></textFieldExpression>
+			</textField>
+			
+			<textField>
+				<reportElement mode="Transparent" x="464" y="3" width="86" height="17" forecolor="#000000" backcolor="#FFFFFF" uuid="9c5bb637-189f-41cb-b3bb-5e68e0b2d650"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="12" isBold="true"/>
+				</textElement>
+			</textField>
+			<line>
+				<reportElement x="0" y="3" width="555" height="1" uuid="4b40a8e7-26a5-4c91-b263-402f716ed4d4"/>
+			</line>
+			<textField>
+				<reportElement mode="Transparent" x="402" y="3" width="52" height="17" forecolor="#000000" backcolor="#FFFFFF" uuid="04c80e64-1824-4e3a-aa72-48a4051a3f6e"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Total "]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="20" width="555" height="1" uuid="9a59052d-cca4-4e51-8450-cc91fdfc22d8"/>
+			</line>
+			<textField>
+				<reportElement x="0" y="48" width="554" height="14" uuid="af0bdcf0-4ccb-4909-93d5-7fe501c353a2"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["TERMS AND CONDITIONS"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2" y="66" width="553" height="14" uuid="7bec972f-0646-4152-9e1b-338efc0e9e43">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["1. Prices can change without prior notice, price quoted at the time of order booking will be valid for the transaction."]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="46" width="555" height="1" uuid="5ddfc309-8b6d-48ee-a2c8-2fe1568b7cc3"/>
+			</line>
+			<textField>
+				<reportElement x="2" y="96" width="550" height="14" uuid="394de026-f271-4df3-8b63-4012a6342750">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["3. Credit notes are valid only with the stamp and signature of the store manager."]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2" y="126" width="551" height="14" uuid="92d978dd-afaf-48cf-95c4-06f965f1b10d">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["5. In case of manufacturing defects products will be replaced at the discretion of the management."]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2" y="81" width="551" height="14" uuid="c360732f-5562-4001-a5a4-f79fd432c8b1">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["2. Custom orders once placed cannot be cancelled. All advances made are non-refundable."]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2" y="141" width="547" height="14" uuid="dc975af6-9126-434e-81c6-a30fec9da456">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["6. For placement of custom order minimum of 75% advance on the total value of the bill is required."]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2" y="156" width="550" height="14" uuid="025a865b-edb1-4626-93eb-42ced38e9277"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["7. All exchange, replacements and credit notes will be provided at the discretion of the management. No cash refunds."]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2" y="111" width="551" height="14" uuid="55f6f3d3-b230-4516-8cc6-50bb5d1b4dcf">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["4. Custom made products or custom ordered fabrics cannot be returned or exchanged after delivery"]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>
