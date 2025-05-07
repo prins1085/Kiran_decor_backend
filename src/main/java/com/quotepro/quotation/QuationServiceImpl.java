@@ -862,6 +862,9 @@ public class QuationServiceImpl implements QuationSerive {
 
 				String deleteSofaQuery = "DELETE FROM sofa WHERE customer_id = " + customer_id;
 				manager.createNativeQuery(deleteSofaQuery).executeUpdate();
+				
+				String deleteinvoice_itemsQuery = "DELETE FROM invoice_items WHERE customer_id =" + customer_id;
+				manager.createNativeQuery(deleteinvoice_itemsQuery).executeUpdate();
 
 				transaction.commit();
 

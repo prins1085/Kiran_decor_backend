@@ -1,10 +1,8 @@
 package com.quotepro.invoice;
 
 import java.sql.Connection;
-import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import javax.sql.DataSource;
 
@@ -15,7 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.quotepro.common.utils.DBUtils;
 
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletResponse;
@@ -36,40 +34,54 @@ public class RptServiceImpl implements RptService {
 	@Autowired
 	private DataSource dataSource;
 
+	@Autowired
+	private DBUtils dbUtils;
+
 	@SuppressWarnings("unchecked")
 	@Override
-	public ResponseEntity<Object> rpt() {
-		HashMap<String, Object> responseMap = new HashMap<>();
-		HashMap parameters = new HashMap();
+	public ResponseEntity<PdfResponse> rpt(String customer_id) {
 		try {
-			// Define the path to the JRXML file
 			String reportsDirPath = servletContext.getRealPath("/reports/") + "WJ";
-			String reportPath = reportsDirPath + "/AAA.jrxml";
 			String logopath = reportsDirPath + "/dd.jpeg";
 
-			String query = " select main.customer_id,main.disc,main.qty,main.total,main.discount,main.customer_id,customer_name,mobile_number,architect_name  from ( "
-					+ " select customer_id, concat( itemname  ,\"(curtain)\") as disc ,   count(curtainid) as qty,  SUM(total)  as total ,discount  from curtain group by customer_id union all  "
-					+ "  select customer_id, concat( itemname  ,\"(blind)\"), 	count(blindid) as qty , SUM(total) as total ,discount from blind group by customer_id union all  "
-					+ "   select customer_id, concat( itemname  ,\"(mattress)\"),count(mattressid) as qty, SUM(total) as total ,discount from mattress group by customer_id union all  "
-					+ "    select customer_id, concat( itemname  ,\" (sofa)\"),  count(sofaid) as qty, SUM(total) as total , 0 from sofa  group by customer_id ) as main left join customers c on main.customer_id = c.customer_id where c.customer_id = 1";
-			parameters.put("SQuery", query);
-			parameters.put("logopath", logopath);
-			// Load the JRXML file
+			String cname = dbUtils.getSingleStringDataNoEntityManager(
+					"select customer_name from customers where customer_id = " + customer_id);
 
-			JasperReport compiledReport = JasperCompileManager.compileReport(reportPath);
-			Connection connection = dataSource.getConnection();
-			byte[] bytes = JasperRunManager.runReportToPdf(compiledReport, parameters, connection);
-			response.setContentType("application/pdf");
-			response.setContentLength(bytes.length);
-			response.getOutputStream().write(bytes, 0, bytes.length);
-			responseMap.put("response", response);
+			PdfResponse response = new PdfResponse();
+			response.setTailFileName(cname + "_TAIL.pdf");
+			response.setFabFileName(cname + "_FAB.pdf");
 
-			return new ResponseEntity<>(responseMap, HttpStatus.OK);
+			// Generate TAIL PDF
+			byte[] tailBytes = generatePdf(customer_id, reportsDirPath, "TAIL", logopath);
+			response.setTailPdfBase64(Base64.getEncoder().encodeToString(tailBytes));
+
+			// Generate FAB PDF
+			byte[] fabBytes = generatePdf(customer_id, reportsDirPath, "FAB", logopath);
+			response.setFabPdfBase64(Base64.getEncoder().encodeToString(fabBytes));
+
+			return ResponseEntity.ok(response);
+
 		} catch (Exception e) {
-			logger.error("Error generating report: {}", e.getMessage(), e);
-			responseMap.put("error", "Failed to generate report: " + e.getMessage());
-			return new ResponseEntity<>(responseMap, HttpStatus.INTERNAL_SERVER_ERROR);
+			logger.error("Error generating reports: {}", e.getMessage(), e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
+	}
+
+	private byte[] generatePdf(String customerId, String reportsDirPath, String reportType, String logopath)
+			throws Exception {
+		String reportPath = reportsDirPath + "/" + reportType + "RPT.jrxml";
+		String query = "SELECT @srno := @srno + 1 AS srno, description AS disc, qty, rate, total, discount, final_total, "
+				+ "customer_name, mobile_number, architect_name FROM (SELECT @srno := 0) AS init, invoice_items ii "
+				+ "LEFT JOIN customers c ON c.customer_id = ii.customer_id " + "WHERE ii.customer_id = " + customerId
+				+ " AND `type` = '" + reportType + "'";
+
+		HashMap<String, Object> parameters = new HashMap<>();
+		parameters.put("SQuery", query);
+		parameters.put("logopath", logopath);
+
+		JasperReport compiledReport = JasperCompileManager.compileReport(reportPath);
+		Connection connection = dataSource.getConnection();
+		return JasperRunManager.runReportToPdf(compiledReport, parameters, connection);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -82,9 +94,12 @@ public class RptServiceImpl implements RptService {
 			String reportsDirPath = servletContext.getRealPath("/reports/") + "WJ";
 			String reportPath = reportsDirPath + "/TAILRPT.jrxml";
 			String logopath = reportsDirPath + "/dd.jpeg";
+			String type = "TAIL";
+			String query = "select  @srno := @srno + 1 AS srno,description as disc, qty, rate , total, discount , final_total, customer_name , mobile_number ,architect_name from (SELECT @srno := 0) AS init,invoice_items ii left join customers c on c.customer_id = ii.customer_id where ii.customer_id = "
+					+ customer_id + " and `type` = '"+type+"'" ;
+			String cname = dbUtils.getSingleStringDataNoEntityManager(
+					"select customer_name  from customers c where customer_id = " + customer_id);
 
-			String query = "select description as disc, qty, rate , total, discount , final_total, customer_name , mobile_number ,architect_name from invoice_items ii left join customers c on c.customer_id = ii.customer_id where ii.customer_id = "+customer_id+" and `type` = \"TAIL\"";
-			
 			parameters.put("SQuery", query);
 			parameters.put("logopath", logopath);
 			// Load the JRXML file
@@ -93,6 +108,47 @@ public class RptServiceImpl implements RptService {
 			Connection connection = dataSource.getConnection();
 			byte[] bytes = JasperRunManager.runReportToPdf(compiledReport, parameters, connection);
 			response.setContentType("application/pdf");
+			String fileName = cname + "_" + "TAIL.pdf";
+			response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
+			response.setContentLength(bytes.length);
+			response.getOutputStream().write(bytes, 0, bytes.length);
+			responseMap.put("response", response);
+
+			return new ResponseEntity<>(responseMap, HttpStatus.OK);
+		} catch (Exception e) {
+			logger.error("Error generating report: {}", e.getMessage(), e);
+			responseMap.put("error", "Failed to generate report: " + e.getMessage());
+			return new ResponseEntity<>(responseMap, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	// =========================FAB======================//
+	@SuppressWarnings("unchecked")
+	@Override
+	public ResponseEntity<Object> rptFAB(String customer_id) {
+		HashMap<String, Object> responseMap = new HashMap<>();
+		HashMap parameters = new HashMap();
+		try {
+			// Define the path to the JRXML file
+			String reportsDirPath = servletContext.getRealPath("/reports/") + "WJ";
+			String reportPath = reportsDirPath + "/FABRPT.jrxml";
+			String logopath = reportsDirPath + "/dd.jpeg";
+			String type = "FAB";
+			String query = "select  @srno := @srno + 1 AS srno,description as disc, qty, rate , total, discount , final_total, customer_name , mobile_number ,architect_name from (SELECT @srno := 0) AS init,invoice_items ii left join customers c on c.customer_id = ii.customer_id where ii.customer_id = "
+					+ customer_id + " and `type` =  '"+type+"'" ;
+			String cname = dbUtils.getSingleStringDataNoEntityManager(
+					"select customer_name  from customers c where customer_id = " + customer_id);
+
+			parameters.put("SQuery", query);
+			parameters.put("logopath", logopath);
+			// Load the JRXML file
+
+			JasperReport compiledReport = JasperCompileManager.compileReport(reportPath);
+			Connection connection = dataSource.getConnection();
+			byte[] bytes = JasperRunManager.runReportToPdf(compiledReport, parameters, connection);
+			response.setContentType("application/pdf");
+			String fileName = cname + "_" + "FAB.pdf";
+			response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
 			response.setContentLength(bytes.length);
 			response.getOutputStream().write(bytes, 0, bytes.length);
 			responseMap.put("response", response);
