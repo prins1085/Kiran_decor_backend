@@ -145,7 +145,7 @@ public class RptServiceImpl implements RptService {
 //			String reportsDirPath = servletContext.getRealPath("/reports/") + "WJ";
 //			String reportPath = reportsDirPath + "/FABRPT.jrxml";
 //			String logopath = reportsDirPath + "/dd.jpeg";
-			String jrxmlFile = "reports/WJ/TAILRPT.jrxml";
+			String jrxmlFile = "reports/WJ/FABRPT.jrxml";
 			String logopath = "reports/WJ/dd.jpeg";
 			
 			InputStream reportStream = getClass().getClassLoader().getResourceAsStream(jrxmlFile);
