@@ -1,75 +1,84 @@
 plugins {
-    id 'java'
-    id 'org.springframework.boot' version '3.4.5-SNAPSHOT'
-    id 'io.spring.dependency-management' version '1.1.7'
+	id 'java'
+	id 'org.springframework.boot' version '3.0.7'
+	id 'io.spring.dependency-management' version '1.1.0'
 }
 
 group = 'com.quotepro'
 version = '0.0.1-SNAPSHOT'
 
+
+apply plugin: "war"
+
+war {
+    enabled=true
+}
+
 java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
-    }
+	sourceCompatibility = '17'
 }
 
 repositories {
-    mavenCentral()
-    maven { url 'https://repo.spring.io/snapshot' }
+	mavenCentral()
 }
 
 dependencies {
-    implementation fileTree(dir: 'build/lib', include: ['*.jar'])
+	implementation fileTree(dir: 'build/lib', include: ['*.jar'])
     implementation 'org.springframework.boot:spring-boot-starter'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
-    implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl:3.0.1'
-    implementation 'javax.servlet:jstl:1.2'
-
-    implementation 'org.apache.poi:poi-ooxml:3.9'
-    implementation 'org.apache.poi:poi:3.9'
-    implementation 'org.apache.poi:poi-ooxml-schemas:4.0.0'
-    implementation 'org.apache.poi:poi-scratchpad:4.0.0'
-
-    implementation 'com.google.code.gson:gson:2.8.6'
-    implementation 'com.h2database:h2' // An in-memory database for testing
+	
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
+	implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl:3.0.1'
+	implementation 'javax.servlet:jstl:1.2'
+	
+	implementation 'org.apache.poi:poi-ooxml:3.9'
+	implementation 'org.apache.poi:poi:3.9'
+	implementation 'org.apache.poi:poi-ooxml-schemas:4.0.0'
+	implementation 'org.apache.poi:poi-scratchpad:4.0.0'
+	
+	implementation 'com.google.code.gson:gson:2.8.6'
+	implementation 'com.h2database:h2' // An in-memory database for testing
     implementation group: 'commons-dbutils', name: 'commons-dbutils', version: '1.7'
-
-    implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api:3.0.0'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    implementation 'org.springframework.boot:spring-boot-starter-mail'
-    runtimeOnly 'com.mysql:mysql-connector-j'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-
-    // Custom dependencies
-    implementation group: 'net.sf.jasperreports', name: 'jasperreports', version: '5.1.0'
-    implementation 'net.sf.jasperreports:jasperreports:6.21.1'
-    implementation group: 'com.lowagie', name: 'itext', version: '2.1.7'
-    implementation group: 'com.itextpdf', name: 'layout', version: '7.0.0'
-    implementation group: 'commons-digester', name: 'commons-digester', version: '1.7'
-    implementation group: 'commons-collections', name: 'commons-collections', version: '2.1'
-    implementation group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.4'
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: '3.2.0'
-
-    implementation 'commons-codec:commons-codec'
-    implementation 'commons-io:commons-io:2.8.0'
-    implementation 'org.apache.commons:commons-lang3:3.9'
-    implementation 'javax.validation:validation-api:2.0.0.Final'
-    implementation 'com.itextpdf:itextpdf:5.5.13'
-    implementation 'net.sf.jasperreports:jasperreports-fonts:6.17.0'
+	
+	
+	implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api:3.0.0'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+	runtimeOnly 'com.mysql:mysql-connector-j'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+	providedCompile 'javax.servlet:jsp-api:2.0'
+	
+	//=================== Custome ==================//
+	// https://mvnrepository.com/artifact/net.sf.jasperreports/jasperreports
+	//implementation group: 'net.sf.jasperreports', name: 'jasperreports', version: '5.5.0'
+	implementation group: 'net.sf.jasperreports', name: 'jasperreports', version: '5.1.0'
+	implementation group: 'com.lowagie', name: 'itext', version: '2.1.7'
+	implementation group: 'com.itextpdf', name: 'layout', version: '7.0.0'
+	implementation group: 'commons-digester', name: 'commons-digester', version: '1.7'
+	implementation group: 'commons-collections', name: 'commons-collections', version: '2.1'
+	//implementation group: 'commons-logging', name: 'commons-logging', version: '1.0.2'
+	implementation group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.4'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: '3.2.0'
+	
+	implementation 'commons-codec:commons-codec'
+	implementation 'commons-io:commons-io:2.8.0'
+	implementation 'org.apache.commons:commons-lang3:3.9'
+	implementation 'javax.validation:validation-api:2.0.0.Final'
+	implementation 'com.itextpdf:itextpdf:5.5.13'
+	implementation 'net.sf.jasperreports:jasperreports-fonts:6.17.0'
     implementation 'org.json:json:20210307'
     implementation 'org.springframework.boot:spring-boot-starter-cache'
-    implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5'
     implementation 'org.xerial:sqlite-jdbc:3.36.0.3'
-
-    implementation 'io.github.cdimascio:dotenv-java:3.0.0'
+     implementation 'io.github.cdimascio:dotenv-java:3.0.0'
+	compileOnly group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
 }
 
 tasks.named('bootBuildImage') {
-    builder = 'paketobuildpacks/builder-jammy-base:latest'
+	builder = 'paketobuildpacks/builder-jammy-base:latest'
 }
 
 tasks.named('test') {
-    useJUnitPlatform()
+	useJUnitPlatform()
 }
