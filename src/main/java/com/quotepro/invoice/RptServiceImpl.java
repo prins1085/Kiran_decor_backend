@@ -1,5 +1,7 @@
 package com.quotepro.invoice;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.util.Base64;
 import java.util.HashMap;
@@ -91,9 +93,18 @@ public class RptServiceImpl implements RptService {
 		HashMap parameters = new HashMap();
 		try {
 			// Define the path to the JRXML file
-			String reportsDirPath = servletContext.getRealPath("/reports/") + "WJ";
-			String reportPath = reportsDirPath + "/TAILRPT.jrxml";
-			String logopath = reportsDirPath + "/dd.jpeg";
+			String jrxmlFile = "reports/WJ/TAILRPT.jrxml";
+			String logopath = "reports/WJ/dd.jpeg";
+			
+			InputStream reportStream = getClass().getClassLoader().getResourceAsStream(jrxmlFile);
+			if (reportStream == null) {
+			    throw new FileNotFoundException("Report file not found in resources: " + jrxmlFile);
+			}
+			
+			//String reportsDirPath = servletContext.getRealPath("/reports/") + "WJ";
+			//String reportPath = reportsDirPath + "/TAILRPT.jrxml";
+			//String logopath = reportsDirPath + "/dd.jpeg";
+			
 			String type = "TAIL";
 			String query = "select  @srno := @srno + 1 AS srno,description as disc, qty, rate , total, discount , final_total, customer_name , mobile_number ,architect_name from (SELECT @srno := 0) AS init,invoice_items ii left join customers c on c.customer_id = ii.customer_id where ii.customer_id = "
 					+ customer_id + " and `type` = '"+type+"'" ;
@@ -101,10 +112,11 @@ public class RptServiceImpl implements RptService {
 					"select customer_name  from customers c where customer_id = " + customer_id);
 
 			parameters.put("SQuery", query);
-			parameters.put("logopath", logopath);
+			parameters.put("logopath", getClass().getClassLoader().getResource("reports/WJ/dd.jpeg").getPath());
+			//parameters.put("logopath", logopath);
 			// Load the JRXML file
 
-			JasperReport compiledReport = JasperCompileManager.compileReport(reportPath);
+			JasperReport compiledReport = JasperCompileManager.compileReport(reportStream);
 			Connection connection = dataSource.getConnection();
 			byte[] bytes = JasperRunManager.runReportToPdf(compiledReport, parameters, connection);
 			response.setContentType("application/pdf");
@@ -130,9 +142,17 @@ public class RptServiceImpl implements RptService {
 		HashMap parameters = new HashMap();
 		try {
 			// Define the path to the JRXML file
-			String reportsDirPath = servletContext.getRealPath("/reports/") + "WJ";
-			String reportPath = reportsDirPath + "/FABRPT.jrxml";
-			String logopath = reportsDirPath + "/dd.jpeg";
+//			String reportsDirPath = servletContext.getRealPath("/reports/") + "WJ";
+//			String reportPath = reportsDirPath + "/FABRPT.jrxml";
+//			String logopath = reportsDirPath + "/dd.jpeg";
+			String jrxmlFile = "reports/WJ/TAILRPT.jrxml";
+			String logopath = "reports/WJ/dd.jpeg";
+			
+			InputStream reportStream = getClass().getClassLoader().getResourceAsStream(jrxmlFile);
+			if (reportStream == null) {
+			    throw new FileNotFoundException("Report file not found in resources: " + jrxmlFile);
+			}
+			
 			String type = "FAB";
 			String query = "select  @srno := @srno + 1 AS srno,description as disc, qty, rate , total, discount , final_total, customer_name , mobile_number ,architect_name from (SELECT @srno := 0) AS init,invoice_items ii left join customers c on c.customer_id = ii.customer_id where ii.customer_id = "
 					+ customer_id + " and `type` =  '"+type+"'" ;
@@ -140,10 +160,12 @@ public class RptServiceImpl implements RptService {
 					"select customer_name  from customers c where customer_id = " + customer_id);
 
 			parameters.put("SQuery", query);
-			parameters.put("logopath", logopath);
+			parameters.put("logopath", getClass().getClassLoader().getResource("reports/WJ/dd.jpeg").getPath());
+			
+			//parameters.put("logopath", logopath);
 			// Load the JRXML file
 
-			JasperReport compiledReport = JasperCompileManager.compileReport(reportPath);
+			JasperReport compiledReport = JasperCompileManager.compileReport(reportStream);
 			Connection connection = dataSource.getConnection();
 			byte[] bytes = JasperRunManager.runReportToPdf(compiledReport, parameters, connection);
 			response.setContentType("application/pdf");
