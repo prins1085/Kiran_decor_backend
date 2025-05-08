@@ -44,6 +44,7 @@ dependencies {
 
     // Custom dependencies
     implementation group: 'net.sf.jasperreports', name: 'jasperreports', version: '5.1.0'
+    implementation 'net.sf.jasperreports:jasperreports:6.21.1'
     implementation group: 'com.lowagie', name: 'itext', version: '2.1.7'
     implementation group: 'com.itextpdf', name: 'layout', version: '7.0.0'
     implementation group: 'commons-digester', name: 'commons-digester', version: '1.7'
