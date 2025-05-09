@@ -13,6 +13,7 @@ java {
 
 repositories {
 	mavenCentral()
+	maven { url "https://jaspersoft.jfrog.io/jaspersoft/third-party-ce-artifacts/" }
 }
 
 dependencies {
@@ -40,20 +41,20 @@ dependencies {
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	
-	implementation group: 'net.sf.jasperreports', name: 'jasperreports', version: '5.1.0'
-	implementation group: 'com.lowagie', name: 'itext', version: '2.1.7'
-	implementation group: 'com.itextpdf', name: 'layout', version: '7.0.0'
-	implementation group: 'commons-digester', name: 'commons-digester', version: '1.7'
-	implementation group: 'commons-collections', name: 'commons-collections', version: '2.1'
-	implementation group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.4'
-	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: '3.2.0'
+	// JasperReports dependencies
+	implementation 'net.sf.jasperreports:jasperreports:6.17.0'
+	implementation 'net.sf.jasperreports:jasperreports-fonts:6.17.0'
+	implementation 'com.lowagie:itext:2.1.7'
+	implementation 'commons-digester:commons-digester:2.1'
+	implementation 'commons-collections:commons-collections:3.2.2'
+	implementation 'commons-beanutils:commons-beanutils:1.9.4'
+	implementation 'org.apache.commons:commons-lang3:3.12.0'
+	implementation 'org.codehaus.groovy:groovy-all:3.0.9'
 	
 	implementation 'commons-codec:commons-codec'
 	implementation 'commons-io:commons-io:2.8.0'
-	implementation 'org.apache.commons:commons-lang3:3.9'
 	implementation 'javax.validation:validation-api:2.0.0.Final'
 	implementation 'com.itextpdf:itextpdf:5.5.13'
-	implementation 'net.sf.jasperreports:jasperreports-fonts:6.17.0'
     implementation 'org.json:json:20210307'
     implementation 'org.springframework.boot:spring-boot-starter-cache'
     implementation 'org.xerial:sqlite-jdbc:3.36.0.3'
