@@ -7,13 +7,6 @@ plugins {
 group = 'com.quotepro'
 version = '0.0.1-SNAPSHOT'
 
-
-apply plugin: "war"
-
-war {
-    enabled=true
-}
-
 java {
 	sourceCompatibility = '17'
 }
@@ -38,27 +31,20 @@ dependencies {
 	implementation 'org.apache.poi:poi-scratchpad:4.0.0'
 	
 	implementation 'com.google.code.gson:gson:2.8.6'
-	implementation 'com.h2database:h2' // An in-memory database for testing
+	implementation 'com.h2database:h2'
     implementation group: 'commons-dbutils', name: 'commons-dbutils', version: '1.7'
-	
 	
 	implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api:3.0.0'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
-	providedCompile 'javax.servlet:jsp-api:2.0'
 	
-	//=================== Custome ==================//
-	// https://mvnrepository.com/artifact/net.sf.jasperreports/jasperreports
-	//implementation group: 'net.sf.jasperreports', name: 'jasperreports', version: '5.5.0'
 	implementation group: 'net.sf.jasperreports', name: 'jasperreports', version: '5.1.0'
 	implementation group: 'com.lowagie', name: 'itext', version: '2.1.7'
 	implementation group: 'com.itextpdf', name: 'layout', version: '7.0.0'
 	implementation group: 'commons-digester', name: 'commons-digester', version: '1.7'
 	implementation group: 'commons-collections', name: 'commons-collections', version: '2.1'
-	//implementation group: 'commons-logging', name: 'commons-logging', version: '1.0.2'
 	implementation group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.4'
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: '3.2.0'
 	
@@ -71,8 +57,8 @@ dependencies {
     implementation 'org.json:json:20210307'
     implementation 'org.springframework.boot:spring-boot-starter-cache'
     implementation 'org.xerial:sqlite-jdbc:3.36.0.3'
-     implementation 'io.github.cdimascio:dotenv-java:3.0.0'
-	compileOnly group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
+    implementation 'io.github.cdimascio:dotenv-java:3.0.0'
+	implementation 'javax.servlet:javax.servlet-api:4.0.1'
 }
 
 tasks.named('bootBuildImage') {
