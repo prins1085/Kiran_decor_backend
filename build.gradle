@@ -16,6 +16,10 @@ repositories {
 	maven { url "https://jaspersoft.jfrog.io/jaspersoft/third-party-ce-artifacts/" }
 }
 
+configurations {
+    all*.exclude group: 'org.bouncycastle'
+}
+
 dependencies {
 	implementation fileTree(dir: 'build/lib', include: ['*.jar'])
     implementation 'org.springframework.boot:spring-boot-starter'
@@ -41,9 +45,9 @@ dependencies {
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	
-	// JasperReports dependencies
-	implementation 'net.sf.jasperreports:jasperreports:6.17.0'
-	implementation 'net.sf.jasperreports:jasperreports-fonts:6.17.0'
+	// Updated JasperReports dependencies
+	implementation 'net.sf.jasperreports:jasperreports:6.20.6'
+	implementation 'net.sf.jasperreports:jasperreports-fonts:6.20.6'
 	implementation 'com.lowagie:itext:2.1.7'
 	implementation 'commons-digester:commons-digester:2.1'
 	implementation 'commons-collections:commons-collections:3.2.2'
@@ -68,4 +72,15 @@ tasks.named('bootBuildImage') {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+// Add this to ensure all dependencies are included in the final jar
+bootJar {
+    enabled = true
+    archiveClassifier = ''
+}
+
+jar {
+    enabled = true
+    archiveClassifier = 'original'
 }
