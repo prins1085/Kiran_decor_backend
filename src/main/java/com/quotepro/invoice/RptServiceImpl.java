@@ -3,6 +3,8 @@ package com.quotepro.invoice;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Base64;
 import java.util.HashMap;
 
@@ -25,7 +27,7 @@ import net.sf.jasperreports.engine.JasperRunManager;
 
 @Service
 public class RptServiceImpl implements RptService {
-	private Logger logger = LoggerFactory.getLogger(getClass());
+	private static final Logger logger = LoggerFactory.getLogger(RptServiceImpl.class);
 
 	@Autowired
 	private HttpServletResponse response;
@@ -83,6 +85,12 @@ public class RptServiceImpl implements RptService {
 
 		JasperReport compiledReport = JasperCompileManager.compileReport(reportPath);
 		Connection connection = dataSource.getConnection();
+		logger.debug("Database connection established successfully");
+		// Test the connection
+		try (Statement stmt = connection.createStatement()) {
+			stmt.execute("SELECT 1");
+			logger.debug("Database connection test successful");
+		}
 		return JasperRunManager.runReportToPdf(compiledReport, parameters, connection);
 	}
 
@@ -91,6 +99,7 @@ public class RptServiceImpl implements RptService {
 	public ResponseEntity<Object> rptTAIL(String customer_id) {
 		HashMap<String, Object> responseMap = new HashMap<>();
 		HashMap parameters = new HashMap();
+		Connection connection = null;
 		try {
 			// Define the path to the JRXML file
 			String jrxmlFile = "reports/WJ/TAILRPT.jrxml";
@@ -124,7 +133,7 @@ public class RptServiceImpl implements RptService {
 			parameters.put("logopath", getClass().getClassLoader().getResource(logopath).getPath());
 
 			JasperReport compiledReport = JasperCompileManager.compileReport(reportStream);
-			Connection connection = dataSource.getConnection();
+			connection = dataSource.getConnection();
 			byte[] bytes = JasperRunManager.runReportToPdf(compiledReport, parameters, connection);
 			
 			response.setContentType("application/pdf");
@@ -143,6 +152,14 @@ public class RptServiceImpl implements RptService {
 			logger.error("Error generating report: {}", e.getMessage(), e);
 			responseMap.put("error", "Failed to generate report: " + e.getMessage());
 			return new ResponseEntity<>(responseMap, HttpStatus.INTERNAL_SERVER_ERROR);
+		} finally {
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					logger.error("Error closing database connection: {}", e.getMessage(), e);
+				}
+			}
 		}
 	}
 
@@ -152,6 +169,7 @@ public class RptServiceImpl implements RptService {
 	public ResponseEntity<Object> rptFAB(String customer_id) {
 		HashMap<String, Object> responseMap = new HashMap<>();
 		HashMap parameters = new HashMap();
+		Connection connection = null;
 		try {
 			// Define the path to the JRXML file
 			String jrxmlFile = "reports/WJ/FABRPT.jrxml";
@@ -185,7 +203,7 @@ public class RptServiceImpl implements RptService {
 			parameters.put("logopath", getClass().getClassLoader().getResource(logopath).getPath());
 
 			JasperReport compiledReport = JasperCompileManager.compileReport(reportStream);
-			Connection connection = dataSource.getConnection();
+			connection = dataSource.getConnection();
 			byte[] bytes = JasperRunManager.runReportToPdf(compiledReport, parameters, connection);
 			
 			response.setContentType("application/pdf");
@@ -204,6 +222,14 @@ public class RptServiceImpl implements RptService {
 			logger.error("Error generating report: {}", e.getMessage(), e);
 			responseMap.put("error", "Failed to generate report: " + e.getMessage());
 			return new ResponseEntity<>(responseMap, HttpStatus.INTERNAL_SERVER_ERROR);
+		} finally {
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					logger.error("Error closing database connection: {}", e.getMessage(), e);
+				}
+			}
 		}
 	}
 }
