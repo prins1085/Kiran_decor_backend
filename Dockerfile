@@ -6,6 +6,14 @@ RUN gradle clean build -x test --no-daemon
 
 # Stage 2: Run the app
 FROM openjdk:17-jdk-slim
+
+# Install font libraries required by JasperReports
+RUN apt-get update && apt-get install -y \
+    libfreetype6 \
+    fontconfig \
+    fonts-dejavu-core \
+    && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 COPY --from=build /app/build/libs/QUOTEPRO-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 9191
