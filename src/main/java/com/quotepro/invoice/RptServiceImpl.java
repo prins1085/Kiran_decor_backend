@@ -96,29 +96,37 @@ public class RptServiceImpl implements RptService {
 			String jrxmlFile = "reports/WJ/TAILRPT.jrxml";
 			String logopath = "reports/WJ/dd.jpeg";
 			
+			// Load the JRXML file from classpath
 			InputStream reportStream = getClass().getClassLoader().getResourceAsStream(jrxmlFile);
 			if (reportStream == null) {
 			    throw new FileNotFoundException("Report file not found in resources: " + jrxmlFile);
 			}
 			
-			//String reportsDirPath = servletContext.getRealPath("/reports/") + "WJ";
-			//String reportPath = reportsDirPath + "/TAILRPT.jrxml";
-			//String logopath = reportsDirPath + "/dd.jpeg";
+			// Load the logo file from classpath
+			InputStream logoStream = getClass().getClassLoader().getResourceAsStream(logopath);
+			if (logoStream == null) {
+			    throw new FileNotFoundException("Logo file not found in resources: " + logopath);
+			}
 			
 			String type = "TAIL";
-			String query = "select  @srno := @srno + 1 AS srno,description as disc, qty, rate , total, discount , final_total, customer_name , mobile_number ,architect_name from (SELECT @srno := 0) AS init,invoice_items ii left join customers c on c.customer_id = ii.customer_id where ii.customer_id = "
-					+ customer_id + " and `type` = '"+type+"'" ;
+			String query = "select @srno := @srno + 1 AS srno, description as disc, qty, rate, total, discount, final_total, " +
+					"customer_name, mobile_number, architect_name from (SELECT @srno := 0) AS init, " +
+					"invoice_items ii left join customers c on c.customer_id = ii.customer_id " +
+					"where ii.customer_id = " + customer_id + " and `type` = '" + type + "'";
+			
 			String cname = dbUtils.getSingleStringDataNoEntityManager(
-					"select customer_name  from customers c where customer_id = " + customer_id);
+					"select customer_name from customers c where customer_id = " + customer_id);
+			if (cname == null) {
+				throw new RuntimeException("Customer not found with ID: " + customer_id);
+			}
 
 			parameters.put("SQuery", query);
-			parameters.put("logopath", getClass().getClassLoader().getResource("reports/WJ/dd.jpeg").getPath());
-			//parameters.put("logopath", logopath);
-			// Load the JRXML file
+			parameters.put("logopath", getClass().getClassLoader().getResource(logopath).getPath());
 
 			JasperReport compiledReport = JasperCompileManager.compileReport(reportStream);
 			Connection connection = dataSource.getConnection();
 			byte[] bytes = JasperRunManager.runReportToPdf(compiledReport, parameters, connection);
+			
 			response.setContentType("application/pdf");
 			String fileName = cname + "_" + "TAIL.pdf";
 			response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
@@ -127,6 +135,10 @@ public class RptServiceImpl implements RptService {
 			responseMap.put("response", response);
 
 			return new ResponseEntity<>(responseMap, HttpStatus.OK);
+		} catch (FileNotFoundException e) {
+			logger.error("Resource file not found: {}", e.getMessage(), e);
+			responseMap.put("error", "Required resource file not found: " + e.getMessage());
+			return new ResponseEntity<>(responseMap, HttpStatus.INTERNAL_SERVER_ERROR);
 		} catch (Exception e) {
 			logger.error("Error generating report: {}", e.getMessage(), e);
 			responseMap.put("error", "Failed to generate report: " + e.getMessage());
@@ -142,32 +154,40 @@ public class RptServiceImpl implements RptService {
 		HashMap parameters = new HashMap();
 		try {
 			// Define the path to the JRXML file
-//			String reportsDirPath = servletContext.getRealPath("/reports/") + "WJ";
-//			String reportPath = reportsDirPath + "/FABRPT.jrxml";
-//			String logopath = reportsDirPath + "/dd.jpeg";
 			String jrxmlFile = "reports/WJ/FABRPT.jrxml";
 			String logopath = "reports/WJ/dd.jpeg";
 			
+			// Load the JRXML file from classpath
 			InputStream reportStream = getClass().getClassLoader().getResourceAsStream(jrxmlFile);
 			if (reportStream == null) {
 			    throw new FileNotFoundException("Report file not found in resources: " + jrxmlFile);
 			}
 			
+			// Load the logo file from classpath
+			InputStream logoStream = getClass().getClassLoader().getResourceAsStream(logopath);
+			if (logoStream == null) {
+			    throw new FileNotFoundException("Logo file not found in resources: " + logopath);
+			}
+			
 			String type = "FAB";
-			String query = "select  @srno := @srno + 1 AS srno,description as disc, qty, rate , total, discount , final_total, customer_name , mobile_number ,architect_name from (SELECT @srno := 0) AS init,invoice_items ii left join customers c on c.customer_id = ii.customer_id where ii.customer_id = "
-					+ customer_id + " and `type` =  '"+type+"'" ;
+			String query = "select @srno := @srno + 1 AS srno, description as disc, qty, rate, total, discount, final_total, " +
+					"customer_name, mobile_number, architect_name from (SELECT @srno := 0) AS init, " +
+					"invoice_items ii left join customers c on c.customer_id = ii.customer_id " +
+					"where ii.customer_id = " + customer_id + " and `type` = '" + type + "'";
+			
 			String cname = dbUtils.getSingleStringDataNoEntityManager(
-					"select customer_name  from customers c where customer_id = " + customer_id);
+					"select customer_name from customers c where customer_id = " + customer_id);
+			if (cname == null) {
+				throw new RuntimeException("Customer not found with ID: " + customer_id);
+			}
 
 			parameters.put("SQuery", query);
-			parameters.put("logopath", getClass().getClassLoader().getResource("reports/WJ/dd.jpeg").getPath());
-			
-			//parameters.put("logopath", logopath);
-			// Load the JRXML file
+			parameters.put("logopath", getClass().getClassLoader().getResource(logopath).getPath());
 
 			JasperReport compiledReport = JasperCompileManager.compileReport(reportStream);
 			Connection connection = dataSource.getConnection();
 			byte[] bytes = JasperRunManager.runReportToPdf(compiledReport, parameters, connection);
+			
 			response.setContentType("application/pdf");
 			String fileName = cname + "_" + "FAB.pdf";
 			response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
@@ -176,6 +196,10 @@ public class RptServiceImpl implements RptService {
 			responseMap.put("response", response);
 
 			return new ResponseEntity<>(responseMap, HttpStatus.OK);
+		} catch (FileNotFoundException e) {
+			logger.error("Resource file not found: {}", e.getMessage(), e);
+			responseMap.put("error", "Required resource file not found: " + e.getMessage());
+			return new ResponseEntity<>(responseMap, HttpStatus.INTERNAL_SERVER_ERROR);
 		} catch (Exception e) {
 			logger.error("Error generating report: {}", e.getMessage(), e);
 			responseMap.put("error", "Failed to generate report: " + e.getMessage());
