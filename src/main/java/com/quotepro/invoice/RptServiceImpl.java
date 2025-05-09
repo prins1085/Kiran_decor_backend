@@ -81,7 +81,9 @@ public class RptServiceImpl implements RptService {
 
 		HashMap<String, Object> parameters = new HashMap<>();
 		parameters.put("SQuery", query);
-		parameters.put("logopath", logopath);
+//		parameters.put("logopath", logopath);
+		InputStream imageStream = getClass().getResourceAsStream(logopath);
+		parameters.put("logopath", imageStream);
 
 		JasperReport compiledReport = JasperCompileManager.compileReport(reportPath);
 		Connection connection = dataSource.getConnection();
