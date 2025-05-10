@@ -130,7 +130,7 @@ public class RptServiceImpl implements RptService {
 			}
 
 			parameters.put("SQuery", query);
-			parameters.put("logopath", getClass().getClassLoader().getResource(logopath).getPath());
+			parameters.put("logopath", getClass().getClassLoader().getResourceAsStream(logopath));
 
 			JasperReport compiledReport = JasperCompileManager.compileReport(reportStream);
 			connection = dataSource.getConnection();
@@ -200,7 +200,7 @@ public class RptServiceImpl implements RptService {
 			}
 
 			parameters.put("SQuery", query);
-			parameters.put("logopath", getClass().getClassLoader().getResource(logopath).getPath());
+			parameters.put("logopath", getClass().getClassLoader().getResourceAsStream(logopath));
 
 			JasperReport compiledReport = JasperCompileManager.compileReport(reportStream);
 			connection = dataSource.getConnection();

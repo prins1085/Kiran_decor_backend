@@ -8,7 +8,7 @@
 	<parameter name="SQuery" class="net.sf.jasperreports.engine.JREmptyDataSource">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
-	<parameter name="logopath" class="java.lang.String">
+	<parameter name="logopath" class="java.io.InputStream">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<queryString>
