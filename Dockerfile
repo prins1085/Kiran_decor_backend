@@ -8,9 +8,13 @@ RUN gradle clean build -x test --no-daemon
 FROM openjdk:17-jdk-slim
 WORKDIR /app
 
-# Add this line to install freetype and fonts
-RUN apt-get update && apt-get install -y libfreetype6 fonts-dejavu-core && rm -rf /var/lib/apt/lists/*
+# Install font libraries and configs
+RUN apt-get update && \
+    apt-get install -y libfreetype6 fonts-dejavu-core fontconfig && \
+    rm -rf /var/lib/apt/lists/*
 
 COPY --from=build /app/build/libs/QUOTEPRO-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 9191
 ENTRYPOINT ["java", "-jar", "app.jar"]
+
+ENV JAVA_TOOL_OPTIONS="-Djava.awt.headless=true"
